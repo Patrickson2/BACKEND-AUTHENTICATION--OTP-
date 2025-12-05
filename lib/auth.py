@@ -145,10 +145,10 @@ def delete_user_account(db, user):
     # Save the changes permanently
     db.commit()
 
-# def get_user_by_id(db, user_id):
-#     """Find a user by their ID number"""
+def get_user_by_id(db, user_id):
+    """Find a user by their ID number"""
     
-#     # Search for user with matching ID
-#     user = db.query(User).filter(User.id == user_id).first()
+    # Search for user with matching ID
+    user = db.query(User).filter(User.id == user_id).first()
     
-#     return user  # Returns user object or None if not found
+    return user  # Returns user object or None if not found
