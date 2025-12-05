@@ -59,32 +59,32 @@ def register_new_user(db, username, email, password):
     
     return new_user  # Return the new user object
 
-# def login_user(db, email, password):
-#     """Check if user's email and password are correct"""
+def login_user(db, email, password):
+    """Check if user's email and password are correct"""
     
-#     # Step 1: Find the user by their email address
-#     user = db.query(User).filter(User.email == email).first()
+    # Step 1: Find the user by their email address
+    user = db.query(User).filter(User.email == email).first()
     
-#     # Step 2: If no user found with this email, login fails
-#     if not user:
-#         return None
+    # Step 2: If no user found with this email, login fails
+    if not user:
+        return None
     
-#     # Step 3: Check if the password is correct
-#     password_is_correct = check_password(password, user.password)
+    # Step 3: Check if the password is correct
+    password_is_correct = check_password(password, user.password)
     
-#     if not password_is_correct:
-#         # Password is wrong - record this failed attempt
-#         failed_attempt = LoginAttempt(
-#             user_id=user.id,
-#             successful=False,  # This login failed
-#             timestamp=datetime.now()
-#         )
-#         db.add(failed_attempt)
-#         db.commit()
-#         return None  # Login failed
+    if not password_is_correct:
+        # Password is wrong - record this failed attempt
+        failed_attempt = LoginAttempt(
+            user_id=user.id,
+            successful=False,  # This login failed
+            timestamp=datetime.now()
+        )
+        db.add(failed_attempt)
+        db.commit()
+        return None  # Login failed
     
-#     # Step 4: Password is correct - return the user
-#     return user
+    # Step 4: Password is correct - return the user
+    return user
 
 # def log_successful_login(db, user_id):
 #     """Record a successful login in the database"""
