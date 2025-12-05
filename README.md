@@ -73,7 +73,7 @@ python auth_app.py
 
 ```bash
 # Install pipenv
-pip install pipenv
+pipenv install
 
 # Create project directory
 mkdir auth-system
