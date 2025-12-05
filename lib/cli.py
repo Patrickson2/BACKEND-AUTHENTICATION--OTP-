@@ -208,24 +208,26 @@ def clear_login_history(user, db):
         db.commit()
         print(" Login history cleared!")
 
-# def delete_account(user, db):
-#     """Delete user's account completely"""
-#     print("\n DELETE ACCOUNT")
-#     print("-"*30)
-#     print("WARNING: This will delete your account forever!")
+def delete_account(user, db):
+    """Delete user's account completely"""
+    print("\n DELETE ACCOUNT")
+    print("-"*30)
+    print("WARNING: This will delete your account forever!")
     
-#     # Ask user to type 'DELETE' to confirm
-#     confirm = input("Type 'DELETE' to confirm: ").strip()
+    # Ask user to type 'DELETE' to confirm
+    confirm = input("Type 'DELETE' to confirm: ").strip()
     
-#     # Only delete if user types exactly 'DELETE'
-#     if confirm == 'DELETE':
-#         # Delete the user account
-#         delete_user_account(db, user)
-#         print(" Account deleted!")
-#         return True  # Account was deleted
-#     else:
-#         print("Account deletion cancelled")
-#         return False  # Account was not deleted
+    # Only delete if user types exactly 'DELETE'
+    if confirm == 'DELETE':
+        # Delete the user account
+        delete_user_account(db, user)
+        print(" Account deleted!")
+        return True  
+        # Account was deleted
+    else:
+        print("Account deletion cancelled")
+        return False  
+        # Account was not deleted
 
 # def user_dashboard(user, db):
 #     """Main menu after user logs in"""
