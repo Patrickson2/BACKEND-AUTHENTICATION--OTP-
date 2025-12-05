@@ -148,25 +148,25 @@ def show_user_profile(user, db):
     print(f"Password: {'*' * 8} (hidden for security)")
     print(f"Account created: {user.created_at.strftime('%Y-%m-%d %H:%M:%S')}")
 
-# def update_user_profile(user, db):
-#     """Let user change their profile details"""
-#     print("\n UPDATE PROFILE")
-#     print("-"*30)
-#     print("Leave blank to keep current value")
+def update_user_profile(user, db):
+    """Let user change their profile details"""
+    print("\n UPDATE PROFILE")
+    print("-"*30)
+    print("Leave blank to keep current value")
     
-#     # Get new values (user can leave blank to keep current)
-#     new_username = input(f"New username (current: {user.username}): ").strip()
-#     new_email = input(f"New email (current: {user.email}): ").strip()
-#     new_password = input("New password: ").strip()
+    # Get new values (user can leave blank to keep current)
+    new_username = input(f"New username (current: {user.username}): ").strip()
+    new_email = input(f"New email (current: {user.email}): ").strip()
+    new_password = input("New password: ").strip()
     
-#     # Update the user's information
-#     update_user_info(
-#         db, user,
-#         new_username=new_username if new_username else None,
-#         new_email=new_email if new_email else None,
-#         new_password=new_password if new_password else None
-#     )
-#     print(" Profile updated!")
+    # Update the user's information
+    update_user_info(
+        db, user,
+        new_username=new_username if new_username else None,
+        new_email=new_email if new_email else None,
+        new_password=new_password if new_password else None
+    )
+    print(" Profile updated!")
 
 # def show_login_history(user, db):
 #     """Show user's past login attempts"""
