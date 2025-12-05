@@ -270,33 +270,33 @@ def user_dashboard(user, db):
     # Close database connection when done
     db.close()
 
-# def start_cli():
-#     """Main function that runs the program"""
-#     # Keep showing main menu until user exits
-#     while True:
-#         # Show the main menu
-#         show_main_menu()
+def start_cli():
+    """Main function that runs the program"""
+    # Keep showing main menu until user exits
+    while True:
+        # Show the main menu
+        show_main_menu()
         
-#         # Get user's choice
-#         choice = input("Choose an option (1-3): ").strip()
+        # Get user's choice
+        choice = input("Choose an option (1-3): ").strip()
         
-#         # Handle each menu option
-#         if choice == '1':
-#             # Register new user
-#             register_user()
-#         elif choice == '2':
-#             # Login existing user
-#             user, db = login_user_with_otp()
-#             # If login successful, show user dashboard
-#             if user:
-#                 user_dashboard(user, db)
-#         elif choice == '3':
-#             # Exit program
-#             print(" Goodbye!")
-#             break  # Exit the program
-#         else:
-#             # Invalid choice
-#             print(" Invalid choice. Please enter 1-3.")
+        # Handle each menu option
+        if choice == '1':
+            # Register new user
+            register_user()
+        elif choice == '2':
+            # Login existing user
+            user, db = login_user_with_otp()
+            # If login successful, show user dashboard
+            if user:
+                user_dashboard(user, db)
+        elif choice == '3':
+            # Exit program
+            print(" Goodbye!")
+            break  # Exit the program
+        else:
+            # Invalid choice
+            print(" Invalid choice. Please enter 1-3.")
         
-#         # Wait for user to press Enter before showing menu again
-#         input("\nPress Enter to continue...")
+        # Wait for user to press Enter before showing menu again
+        input("\nPress Enter to continue...")
