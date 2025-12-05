@@ -86,19 +86,19 @@ def login_user(db, email, password):
     # Step 4: Password is correct - return the user
     return user
 
-# def log_successful_login(db, user_id):
-#     """Record a successful login in the database"""
+def log_successful_login(db, user_id):
+    """Record a successful login in the database"""
     
-#     # Create a record of this successful login
-#     success_attempt = LoginAttempt(
-#         user_id=user_id,
-#         successful=True,  # This login succeeded
-#         timestamp=datetime.now()
-#     )
+    # Create a record of this successful login
+    success_attempt = LoginAttempt(
+        user_id=user_id,
+        successful=True,  # This login succeeded
+        timestamp=datetime.now()
+    )
     
-#     # Save it to the database
-#     db.add(success_attempt)
-#     db.commit()
+    # Save it to the database
+    db.add(success_attempt)
+    db.commit()
 
 # def update_user_info(db, user, new_username=None, new_email=None, new_password=None):
 #     """Update user's profile information"""
