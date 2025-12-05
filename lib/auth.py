@@ -136,14 +136,14 @@ def update_user_info(db, user, new_username=None, new_email=None, new_password=N
     db.commit()
     db.refresh(user)  # Get updated user data
 
-# def delete_user_account(db, user):
-#     """Completely remove a user account from the database"""
+def delete_user_account(db, user):
+    """Completely remove a user account from the database"""
     
-#     # Delete the user (this also deletes related OTP codes and login attempts)
-#     db.delete(user)
+    # Delete the user (this also deletes related OTP codes and login attempts)
+    db.delete(user)
     
-#     # Save the changes permanently
-#     db.commit()
+    # Save the changes permanently
+    db.commit()
 
 # def get_user_by_id(db, user_id):
 #     """Find a user by their ID number"""
