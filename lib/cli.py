@@ -195,18 +195,18 @@ def show_login_history(user, db):
         time = attempt.timestamp.strftime('%Y-%m-%d %H:%M:%S')
         print(f"{time} - {status}")
 
-# def clear_login_history(user, db):
-#     """Delete all login history for this user"""
-#     # Ask user to confirm
-#     confirm = input("Clear all login history? (y/n): ").strip().lower()
+def clear_login_history(user, db):
+    """Delete all login history for this user"""
+    # Ask user to confirm
+    confirm = input("Clear all login history? (y/n): ").strip().lower()
     
-#     # Only delete if user types 'y'
-#     if confirm == 'y':
-#         # Delete all login attempts for this user
-#         db.query(LoginAttempt).filter(LoginAttempt.user_id == user.id).delete()
-#         # Save changes to database
-#         db.commit()
-#         print(" Login history cleared!")
+    # Only delete if user types 'y'
+    if confirm == 'y':
+        # Delete all login attempts for this user
+        db.query(LoginAttempt).filter(LoginAttempt.user_id == user.id).delete()
+        # Save changes to database
+        db.commit()
+        print(" Login history cleared!")
 
 # def delete_account(user, db):
 #     """Delete user's account completely"""
