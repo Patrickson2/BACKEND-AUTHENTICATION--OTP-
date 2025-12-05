@@ -1,4 +1,4 @@
-# w CLI Authentication System
+#  CLI Authentication System
 
 A beginner-friendly command-line authentication system built with Python, SQLAlchemy ORM, and OTP verification for secure user management.
 
