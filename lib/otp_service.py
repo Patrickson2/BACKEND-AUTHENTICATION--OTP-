@@ -51,47 +51,47 @@ def create_new_otp(db, user_id):
     # Step 7: Return the code so it can be sent to the user
     return code
 
-# def verify_otp_code(db, user_id, entered_code):
-#     """Check if the OTP code entered by the user is correct and valid"""
+def verify_otp_code(db, user_id, entered_code):
+    """Check if the OTP code entered by the user is correct and valid"""
     
-#     # Step 1: Find the OTP code in the database
-#     otp = db.query(OTP).filter(
-#         OTP.user_id == user_id,    # For this specific user
-#         OTP.code == entered_code,  # With the code they entered
-#         OTP.is_used == False       # That hasn't been used yet
-#     ).first()
+    # Step 1: Find the OTP code in the database
+    otp = db.query(OTP).filter(
+        OTP.user_id == user_id,    # For this specific user
+        OTP.code == entered_code,  # With the code they entered
+        OTP.is_used == False       # That hasn't been used yet
+    ).first()
     
-#     # Step 2: Check if OTP exists and is not expired
-#     if not otp:
-#         # No matching OTP found
-#         return False
+    # Step 2: Check if OTP exists and is not expired
+    if not otp:
+        # No matching OTP found
+        return False
     
-#     if otp.is_expired():
-#         # OTP exists but has expired
-#         return False
+    if otp.is_expired():
+        # OTP exists but has expired
+        return False
     
-#     # Step 3: OTP is valid! Mark it as used so it can't be used again
-#     otp.is_used = True
-#     db.commit()  # Save the change
+    # Step 3: OTP is valid! Mark it as used so it can't be used again
+    otp.is_used = True
+    db.commit()  # Save the change
     
-#     # Step 4: Return True to indicate successful verification
-#     return True
+    # Step 4: Return True to indicate successful verification
+    return True
 
-# def send_otp_email(email, otp_code):
-#     """Send OTP code to user's email (simulated - prints to console)"""
+def send_otp_email(email, otp_code):
+    """Send OTP code to user's email (simulated - prints to console)"""
     
-#     # In a real application, this would send an actual email
-#     # For this demo, we just print it to the console
+    # In a real application, this would send an actual email
+    # For this demo, we just print it to the console
     
-#     print(f"\n" + "="*50)
-#     print(f" EMAIL SENT TO: {email}")
-#     print(f"Subject: Your Login Verification Code")
-#     print(f"")
-#     print(f"Your OTP code is: {otp_code}")
-#     print(f"This code will expire in 10 minutes.")
-#     print(f"")
-#     print(f"Do not share this code with anyone!")
-#     print("="*50)
+    print(f"\n" + "="*50)
+    print(f" EMAIL SENT TO: {email}")
+    print(f"Subject: Your Login Verification Code")
+    print(f"")
+    print(f"Your OTP code is: {otp_code}")
+    print(f"This code will expire in 10 minutes.")
+    print(f"")
+    print(f"Do not share this code with anyone!")
+    print("="*50)
     
-#     # Return True to indicate email was "sent" successfully
-#     return True
+    # Return True to indicate email was "sent" successfully
+    return True
