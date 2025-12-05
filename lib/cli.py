@@ -229,46 +229,46 @@ def delete_account(user, db):
         return False  
         # Account was not deleted
 
-# def user_dashboard(user, db):
-#     """Main menu after user logs in"""
-#     # Keep showing menu until user logs out
-#     while True:
-#         # Show the dashboard menu
-#         show_user_dashboard(user.username)
+def user_dashboard(user, db):
+    """Main menu after user logs in"""
+    # Keep showing menu until user logs out
+    while True:
+        # Show the dashboard menu
+        show_user_dashboard(user.username)
         
-#         # Get user's choice
-#         choice = input("Choose an option (1-6): ").strip()
+        # Get user's choice
+        choice = input("Choose an option (1-6): ").strip()
         
-#         # Handle each menu option
-#         if choice == '1':
-#             # Show user's profile
-#             show_user_profile(user, db)
-#         elif choice == '2':
-#             # Update user's profile
-#             update_user_profile(user, db)
-#         elif choice == '3':
-#             # Show login history
-#             show_login_history(user, db)
-#         elif choice == '4':
-#             # Clear login history
-#             clear_login_history(user, db)
-#         elif choice == '5':
-#             # Delete account
-#             if delete_account(user, db):
-#                 break  # Exit dashboard if account deleted
-#         elif choice == '6':
-#             # Logout
-#             print(" Logged out successfully!")
-#             break  # Exit dashboard
-#         else:
-#             # Invalid choice
-#             print(" Invalid choice. Please enter 1-6.")
+        # Handle each menu option
+        if choice == '1':
+            # Show user's profile
+            show_user_profile(user, db)
+        elif choice == '2':
+            # Update user's profile
+            update_user_profile(user, db)
+        elif choice == '3':
+            # Show login history
+            show_login_history(user, db)
+        elif choice == '4':
+            # Clear login history
+            clear_login_history(user, db)
+        elif choice == '5':
+            # Delete account
+            if delete_account(user, db):
+                break  # Exit dashboard if account deleted
+        elif choice == '6':
+            # Logout
+            print(" Logged out successfully!")
+            break  # Exit dashboard
+        else:
+            # Invalid choice
+            print(" Invalid choice. Please enter 1-6.")
         
-#         # Wait for user to press Enter before showing menu again
-#         input("\nPress Enter to continue...")
+        # Wait for user to press Enter before showing menu again
+        input("\nPress Enter to continue...")
     
-#     # Close database connection when done
-#     db.close()
+    # Close database connection when done
+    db.close()
 
 # def start_cli():
 #     """Main function that runs the program"""
