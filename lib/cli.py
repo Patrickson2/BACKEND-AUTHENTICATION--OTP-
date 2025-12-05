@@ -139,14 +139,14 @@ def login_user_with_otp():
     print(" Too many wrong attempts")
     return None, None
 
-# def show_user_profile(user, db):
-#     """Display user's profile information"""
-#     print("\n YOUR PROFILE")
-#     print("-"*30)
-#     print(f"Username: {user.username}")
-#     print(f"Email: {user.email}")
-#     print(f"Password: {'*' * 8} (hidden for security)")
-#     print(f"Account created: {user.created_at.strftime('%Y-%m-%d %H:%M:%S')}")
+def show_user_profile(user, db):
+    """Display user's profile information"""
+    print("\n YOUR PROFILE")
+    print("-"*30)
+    print(f"Username: {user.username}")
+    print(f"Email: {user.email}")
+    print(f"Password: {'*' * 8} (hidden for security)")
+    print(f"Account created: {user.created_at.strftime('%Y-%m-%d %H:%M:%S')}")
 
 # def update_user_profile(user, db):
 #     """Let user change their profile details"""
