@@ -86,58 +86,58 @@ def register_user():
     else:
         print(" Username or email already exists")
 
-# def login_user_with_otp():
-#     """Handle user login with OTP code verification"""
-#     print("\n LOGIN")
-#     print("-"*30)
+def login_user_with_otp():
+    """Handle user login with OTP code verification"""
+    print("\n LOGIN")
+    print("-"*30)
     
-#     # Get login details from user
-#     email = input("Enter email: ").strip()
-#     password = input("Enter password: ").strip()
+    # Get login details from user
+    email = input("Enter email: ").strip()
+    password = input("Enter password: ").strip()
     
-#     # Connect to database
-#     db = get_database()
+    # Connect to database
+    db = get_database()
     
-#     # Check if email and password are correct
-#     user = login_user(db, email, password)
+    # Check if email and password are correct
+    user = login_user(db, email, password)
     
-#     # If login failed, stop here
-#     if not user:
-#         print(" Wrong email or password")
-#         return None, None
+    # If login failed, stop here
+    if not user:
+        print(" Wrong email or password")
+        return None, None
     
-#     print(" Email and password are correct!")
+    print(" Email and password are correct!")
     
-#     # Step 1: Create OTP code for this user
-#     otp_code = create_new_otp(db, user.id)
+    # Step 1: Create OTP code for this user
+    otp_code = create_new_otp(db, user.id)
     
-#     # Step 2: Send OTP code to user's email (simulated)
-#     send_otp_email(user.email, otp_code)
+    # Step 2: Send OTP code to user's email (simulated)
+    send_otp_email(user.email, otp_code)
     
-#     # Step 3: Ask user to enter the OTP code
-#     print("\n ENTER OTP CODE")
-#     print("Check the email message above for your code")
+    # Step 3: Ask user to enter the OTP code
+    print("\n ENTER OTP CODE")
+    print("Check the email message above for your code")
     
-#     # Give user 3 chances to enter correct OTP
-#     attempts = 3
-#     while attempts > 0:
-#         entered_otp = input(f"Enter OTP code ({attempts} attempts left): ").strip()
+    # Give user 3 chances to enter correct OTP
+    attempts = 3
+    while attempts > 0:
+        entered_otp = input(f"Enter OTP code ({attempts} attempts left): ").strip()
         
-#         # Check if OTP code is correct
-#         if verify_otp_code(db, user.id, entered_otp):
-#             # OTP is correct - record successful login
-#             log_successful_login(db, user.id)
-#             print(" Login successful!")
-#             return user, db  # Return user and database connection
-#         else:
-#             # OTP is wrong - reduce attempts
-#             attempts -= 1
-#             if attempts > 0:
-#                 print(" Wrong OTP code. Try again.")
+        # Check if OTP code is correct
+        if verify_otp_code(db, user.id, entered_otp):
+            # OTP is correct - record successful login
+            log_successful_login(db, user.id)
+            print(" Login successful!")
+            return user, db  # Return user and database connection
+        else:
+            # OTP is wrong - reduce attempts
+            attempts -= 1
+            if attempts > 0:
+                print(" Wrong OTP code. Try again.")
     
-#     # Too many wrong attempts
-#     print(" Too many wrong attempts")
-#     return None, None
+    # Too many wrong attempts
+    print(" Too many wrong attempts")
+    return None, None
 
 # def show_user_profile(user, db):
 #     """Display user's profile information"""
