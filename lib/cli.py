@@ -168,32 +168,32 @@ def update_user_profile(user, db):
     )
     print(" Profile updated!")
 
-# def show_login_history(user, db):
-#     """Show user's past login attempts"""
-#     print("\n LOGIN HISTORY")
-#     print("-"*40)
+def show_login_history(user, db):
+    """Show user's past login attempts"""
+    print("\n LOGIN HISTORY")
+    print("-"*40)
     
-#     # Get last 10 login attempts from database
-#     attempts = db.query(LoginAttempt).filter(
-#         LoginAttempt.user_id == user.id
-#     ).order_by(LoginAttempt.timestamp.desc()).limit(10).all()
+    # Get last 10 login attempts from database
+    attempts = db.query(LoginAttempt).filter(
+        LoginAttempt.user_id == user.id
+    ).order_by(LoginAttempt.timestamp.desc()).limit(10).all()
     
-#     # Check if user has any login history
-#     if not attempts:
-#         print("No login history found")
-#         return
+    # Check if user has any login history
+    if not attempts:
+        print("No login history found")
+        return
     
-#     # Show each login attempt
-#     for attempt in attempts:
-#         # Show if login was successful or failed
-#         if attempt.successful:
-#             status = " SUCCESS"
-#         else:
-#             status = " FAILED"
+    # Show each login attempt
+    for attempt in attempts:
+        # Show if login was successful or failed
+        if attempt.successful:
+            status = " SUCCESS"
+        else:
+            status = " FAILED"
         
-#         # Format the time nicely
-#         time = attempt.timestamp.strftime('%Y-%m-%d %H:%M:%S')
-#         print(f"{time} - {status}")
+        # Format the time nicely
+        time = attempt.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        print(f"{time} - {status}")
 
 # def clear_login_history(user, db):
 #     """Delete all login history for this user"""
