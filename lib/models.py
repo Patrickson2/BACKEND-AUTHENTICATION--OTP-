@@ -33,12 +33,18 @@ class OTP(Base):
     __tablename__ = 'otp_codes'
     
     # Define the columns in the otp_codes table
-    id = Column(Integer, primary_key=True)                     # Unique ID for each OTP
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)  # Which user this OTP belongs to
-    code = Column(String(6), nullable=False)                  # The 6-digit OTP code
-    created_at = Column(DateTime, default=datetime.now)       # When OTP was created
-    expires_at = Column(DateTime, nullable=False)             # When OTP expires
-    is_used = Column(Boolean, default=False)                  # Has this OTP been used already?
+    id = Column(Integer, primary_key=True)                    
+     # Unique ID for each OTP
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)  
+    # Which user this OTP belongs to
+    code = Column(String(6), nullable=False)                 
+     # The 6-digit OTP code
+    created_at = Column(DateTime, default=datetime.now)      
+     # When OTP was created
+    expires_at = Column(DateTime, nullable=False)            
+     # When OTP expires
+    is_used = Column(Boolean, default=False)                 
+     # Has this OTP been used already?
     
     # Connect back to the User table
     user = relationship("User", back_populates="otp_codes")
@@ -62,10 +68,14 @@ class LoginAttempt(Base):
     __tablename__ = 'login_attempts'
     
     # Define the columns in the login_attempts table
-    id = Column(Integer, primary_key=True)                     # Unique ID for each login attempt
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)  # Which user tried to login
-    timestamp = Column(DateTime, default=datetime.now)        # When the login attempt happened
-    successful = Column(Boolean, default=False)               # Did the login succeed? (True/False)
+    id = Column(Integer, primary_key=True)                     
+    # Unique ID for each login attempt
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False) 
+     # Which user tried to login
+    timestamp = Column(DateTime, default=datetime.now)        
+    # When the login attempt happened
+    successful = Column(Boolean, default=False)               
+    # Did the login succeed? (True/False)
     
     # Connect back to the User table
     user = relationship("User", back_populates="login_attempts")
