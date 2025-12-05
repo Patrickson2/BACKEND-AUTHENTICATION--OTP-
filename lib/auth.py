@@ -17,14 +17,14 @@ def hash_password(password):
     # Convert back to string and return
     return hashed.decode('utf-8')
 
-# def check_password(password, hashed_password):
-#     """Check if a plain password matches the hashed version"""
-#     # Convert both passwords to bytes
-#     password_bytes = password.encode('utf-8')
-#     hashed_bytes = hashed_password.encode('utf-8')
+def check_password(password, hashed_password):
+    """Check if a plain password matches the hashed version"""
+    # Convert both passwords to bytes
+    password_bytes = password.encode('utf-8')
+    hashed_bytes = hashed_password.encode('utf-8')
     
-#     # Use bcrypt to compare them securely
-#     return bcrypt.checkpw(password_bytes, hashed_bytes)
+    # Use bcrypt to compare them securely
+    return bcrypt.checkpw(password_bytes, hashed_bytes)
 
 # def register_new_user(db, username, email, password):
 #     """Create a new user account in the database"""
