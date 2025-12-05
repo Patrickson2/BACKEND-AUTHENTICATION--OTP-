@@ -100,41 +100,41 @@ def log_successful_login(db, user_id):
     db.add(success_attempt)
     db.commit()
 
-# def update_user_info(db, user, new_username=None, new_email=None, new_password=None):
-#     """Update user's profile information"""
+def update_user_info(db, user, new_username=None, new_email=None, new_password=None):
+    """Update user's profile information"""
     
-#     # Update username if user provided a new one
-#     if new_username:
-#         # Check if another user already has this username
-#         username_taken = db.query(User).filter(
-#             User.username == new_username, 
-#             User.id != user.id  # Don't check against current user
-#         ).first()
+    # Update username if user provided a new one
+    if new_username:
+        # Check if another user already has this username
+        username_taken = db.query(User).filter(
+            User.username == new_username, 
+            User.id != user.id  # Don't check against current user
+        ).first()
         
-#         # Only update if username is available
-#         if not username_taken:
-#             user.username = new_username
+        # Only update if username is available
+        if not username_taken:
+            user.username = new_username
     
-#     # Update email if user provided a new one
-#     if new_email:
-#         # Check if another user already has this email
-#         email_taken = db.query(User).filter(
-#             User.email == new_email, 
-#             User.id != user.id  # Don't check against current user
-#         ).first()
+    # Update email if user provided a new one
+    if new_email:
+        # Check if another user already has this email
+        email_taken = db.query(User).filter(
+            User.email == new_email, 
+            User.id != user.id  # Don't check against current user
+        ).first()
         
-#         # Only update if email is available
-#         if not email_taken:
-#             user.email = new_email
+        # Only update if email is available
+        if not email_taken:
+            user.email = new_email
     
-#     # Update password if user provided a new one
-#     if new_password:
-#         # Hash the new password before storing
-#         user.password = hash_password(new_password)
+    # Update password if user provided a new one
+    if new_password:
+        # Hash the new password before storing
+        user.password = hash_password(new_password)
     
-#     # Save all changes to the database
-#     db.commit()
-#     db.refresh(user)  # Get updated user data
+    # Save all changes to the database
+    db.commit()
+    db.refresh(user)  # Get updated user data
 
 # def delete_user_account(db, user):
 #     """Completely remove a user account from the database"""
