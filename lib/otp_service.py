@@ -11,43 +11,45 @@ def generate_otp_code():
     # Convert the number to a string and return it
     return str(random_number)
 
-# def create_new_otp(db, user_id):
-#     """Generate a new OTP code for a specific user"""
+def create_new_otp(db, user_id):
+    """Generate a new OTP code for a specific user"""
     
-#     # Step 1: Find any old unused OTP codes for this user
-#     old_otps = db.query(OTP).filter(
-#         OTP.user_id == user_id,   
-#          # For this specific user
-#         OTP.is_used == False      
-#          # That haven't been used yet
-#     ).all()
+    # Step 1: Find any old unused OTP codes for this user
+    old_otps = db.query(OTP).filter(
+        OTP.user_id == user_id,   
+         # For this specific user
+        OTP.is_used == False      
+         # That haven't been used yet
+    ).all()
     
-#     # Step 2: Mark all old OTP codes as used (so they can't be used anymore)
-#     for old_otp in old_otps:
-#         old_otp.is_used = True
+    # Step 2: Mark all old OTP codes as used (so they can't be used anymore)
+    for old_otp in old_otps:
+        old_otp.is_used = True
     
-#     # Step 3: Generate a new 6-digit OTP code
-#     code = generate_otp_code()
+    # Step 3: Generate a new 6-digit OTP code
+    code = generate_otp_code()
     
-#     # Step 4: Set expiration time (10 minutes from now)
-#     current_time = datetime.now()
-#     expires_at = current_time + timedelta(minutes=10)
+    # Step 4: Set expiration time (10 minutes from now)
+    current_time = datetime.now()
+    expires_at = current_time + timedelta(minutes=10)
     
-#     # Step 5: Create a new OTP record in the database
-#     new_otp = OTP(
-#         user_id=user_id,           # Which user this OTP belongs to
-#         code=code,                 # The 6-digit code
-#         created_at=current_time,   # When it was created
-#         expires_at=expires_at,     # When it expires (10 minutes later)
-#         is_used=False              # It hasn't been used yet
-#     )
+    # Step 5: Create a new OTP record in the database
+    new_otp = OTP(
+        user_id=user_id,           # Which user this OTP belongs to
+        code=code,                 # The 6-digit code
+        created_at=current_time,   # When it was created
+        expires_at=expires_at,     # When it expires (10 minutes later)
+        is_used=False              # It hasn't been used yet
+    )
     
-#     # Step 6: Save the new OTP to the database
-#     db.add(new_otp)    # Add to database session
-#     db.commit()        # Save permanently
+    # Step 6: Save the new OTP to the database
+    db.add(new_otp)   
+     # Add to database session
+    db.commit()       
+     # Save permanently
     
-#     # Step 7: Return the code so it can be sent to the user
-#     return code
+    # Step 7: Return the code so it can be sent to the user
+    return code
 
 # def verify_otp_code(db, user_id, entered_code):
 #     """Check if the OTP code entered by the user is correct and valid"""
