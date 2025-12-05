@@ -12,10 +12,14 @@ class User(Base):
     
     # Define the columns (fields) in the users table
     id = Column(Integer, primary_key=True)  # Unique ID number for each user
-    username = Column(String(50), unique=True, nullable=False)  # Username (must be unique)
-    email = Column(String(100), unique=True, nullable=False)    # Email (must be unique)
-    password = Column(String(255), nullable=False)             # Hashed password (never plain text!)
-    created_at = Column(DateTime, default=datetime.now)        # When account was created
+    username = Column(String(50), unique=True, nullable=False) 
+     # Username (must be unique)
+    email = Column(String(100), unique=True, nullable=False)   
+     # Email (must be unique)
+    password = Column(String(255), nullable=False)            
+     # Hashed password (never plain text!)
+    created_at = Column(DateTime, default=datetime.now)       
+     # When account was created
     
     # Connect this table to other tables (relationships)
     # When a user is deleted, also delete their OTP codes and login attempts
