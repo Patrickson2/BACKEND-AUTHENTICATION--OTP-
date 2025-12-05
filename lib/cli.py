@@ -46,45 +46,45 @@ def show_user_dashboard(username):
     print("6. Logout (Sign out)")
     print("-"*40)
 
-# def register_user():
-#     """Handle creating a new user account"""
-#     print("\n CREATE NEW ACCOUNT")
-#     print("-"*30)
+def register_user():
+    """Handle creating a new user account"""
+    print("\n CREATE NEW ACCOUNT")
+    print("-"*30)
     
-#     # Get user input
-#     username = input("Enter username: ").strip()
-#     email = input("Enter email: ").strip()
-#     password = input("Enter password: ").strip()
+    # Get user input
+    username = input("Enter username: ").strip()
+    email = input("Enter email: ").strip()
+    password = input("Enter password: ").strip()
     
-#     # Check if username is long enough
-#     if len(username) < 3:
-#         print(" Username too short (need at least 3 characters)")
-#         return
+    # Check if username is long enough
+    if len(username) < 3:
+        print(" Username too short (need at least 3 characters)")
+        return
     
-#     # Check if email format is correct
-#     if not is_valid_email(email):
-#         print(" Invalid email format")
-#         return
+    # Check if email format is correct
+    if not is_valid_email(email):
+        print(" Invalid email format")
+        return
     
-#     # Check if password is long enough
-#     if len(password) < 6:
-#         print(" Password too short (need at least 6 characters)")
-#         return
+    # Check if password is long enough
+    if len(password) < 6:
+        print(" Password too short (need at least 6 characters)")
+        return
     
-#     # Connect to database
-#     db = get_database()
+    # Connect to database
+    db = get_database()
     
-#     # Try to create new user
-#     user = register_new_user(db, username, email, password)
+    # Try to create new user
+    user = register_new_user(db, username, email, password)
     
-#     # Close database connection
-#     db.close()
+    # Close database connection
+    db.close()
     
-#     # Check if user was created successfully
-#     if user:
-#         print(f" Account created! Welcome {user.username}!")
-#     else:
-#         print(" Username or email already exists")
+    # Check if user was created successfully
+    if user:
+        print(f" Account created! Welcome {user.username}!")
+    else:
+        print(" Username or email already exists")
 
 # def login_user_with_otp():
 #     """Handle user login with OTP code verification"""
@@ -115,7 +115,7 @@ def show_user_dashboard(username):
 #     send_otp_email(user.email, otp_code)
     
 #     # Step 3: Ask user to enter the OTP code
-#     print("\n📱 ENTER OTP CODE")
+#     print("\n ENTER OTP CODE")
 #     print("Check the email message above for your code")
     
 #     # Give user 3 chances to enter correct OTP
