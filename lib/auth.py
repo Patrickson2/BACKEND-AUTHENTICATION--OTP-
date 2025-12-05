@@ -26,36 +26,38 @@ def check_password(password, hashed_password):
     # Use bcrypt to compare them securely
     return bcrypt.checkpw(password_bytes, hashed_bytes)
 
-# def register_new_user(db, username, email, password):
-#     """Create a new user account in the database"""
+def register_new_user(db, username, email, password):
+    """Create a new user account in the database"""
     
-#     # Step 1: Check if someone already has this username
-#     existing_user = db.query(User).filter(User.username == username).first()
-#     if existing_user:
-#         return None  # Username is taken
+    # Step 1: Check if someone already has this username
+    existing_user = db.query(User).filter(User.username == username).first()
+    if existing_user:
+        return None  # Username is taken
     
-#     # Step 2: Check if someone already has this email
-#     existing_email = db.query(User).filter(User.email == email).first()
-#     if existing_email:
-#         return None  # Email is taken
+    # Step 2: Check if someone already has this email
+    existing_email = db.query(User).filter(User.email == email).first()
+    if existing_email:
+        return None  # Email is taken
     
-#     # Step 3: Create the password hash (never store plain passwords!)
-#     hashed_password = hash_password(password)
+    # Step 3: Create the password hash (never store plain passwords!)
+    hashed_password = hash_password(password)
     
-#     # Step 4: Create a new user object
-#     new_user = User(
-#         username=username,
-#         email=email,
-#         password=hashed_password,  # Store the hashed version
-#         created_at=datetime.now()  # Record when account was created
-#     )
+    # Step 4: Create a new user object
+    new_user = User(
+        username=username,
+        email=email,
+        password=hashed_password,  
+        # Store the hashed version
+        created_at=datetime.now()  
+        # Record when account was created
+    )
     
-#     # Step 5: Save the new user to the database
-#     db.add(new_user)        # Add to database session
-#     db.commit()             # Save changes permanently
-#     db.refresh(new_user)    # Get the updated user with ID
+    # Step 5: Save the new user to the database
+    db.add(new_user)        # Add to database session
+    db.commit()             # Save changes permanently
+    db.refresh(new_user)    # Get the updated user with ID
     
-#     return new_user  # Return the new user object
+    return new_user  # Return the new user object
 
 # def login_user(db, email, password):
 #     """Check if user's email and password are correct"""
