@@ -1,5 +1,4 @@
 # Command Line Interface - all the menus and user interactions
-import re
 from lib.database import get_database
 from lib.auth import register_new_user, login_user, log_successful_login, update_user_info, delete_user_account, get_user_by_id
 from lib.otp_service import create_new_otp, verify_otp_code, send_otp_email
@@ -7,8 +6,18 @@ from lib.models import LoginAttempt
 
 def is_valid_email(email):
     """Check if email format is correct"""
-    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    return re.match(pattern, email) is not None
+    if "@" not in email:
+        return False
+
+    name, _, domain = email.partition("@")
+
+    if "." not in domain:
+        return False
+
+    if not name or not domain:
+        return False
+
+    return True
 
 def show_main_menu():
     """Display the main menu options"""
@@ -143,8 +152,8 @@ def show_login_history(user, db):
         return
     
     for attempt in attempts:
-        status = "SUCCESS" if attempt.successful else " FAILED"
-        # time = attempt.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        status = "SUCCESS" if attempt.successful else "FAILED"
+        time = attempt.timestamp.strftime('%Y-%m-%d %H:%M:%S')
         print(f"{time} - {status}")
 
 def clear_login_history(user, db):
