@@ -1,0 +1,10 @@
+fastapi==0.115.0
+uvicorn
+sqlalchemy==2.0.35
+bcrypt==4.2.0
+pydantic[email]==2.9.0
+python-multipart==0.0.12
+cryptography==43.0.1
+secure-smtplib
+twilio
+phonenumbers
