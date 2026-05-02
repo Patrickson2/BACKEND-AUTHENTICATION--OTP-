@@ -67,7 +67,7 @@ function App() {
   );
 
   // Phone validation function
-  const validatePhoneNumber = (countryCode: string, phoneNumber: string) => {
+  const validatePhoneNumber = (_countryCode: string, phoneNumber: string) => {
     // Basic validation - check if phone number has reasonable length
     if (phoneNumber.length < 7) {
       setPhoneError("Phone number too short");
