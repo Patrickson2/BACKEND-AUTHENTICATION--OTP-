@@ -1,14 +1,131 @@
-#  CLI Authentication System
+#  OTP Authentication System
 
-A beginner-friendly command-line authentication system built with Python, SQLAlchemy ORM, and OTP verification for secure user management.
+> A complete authentication system with CLI, Web API, and real OTP delivery via Email/SMS
 
-## Project Overview
+##  System Overview
 
-This CLI application implements a complete authentication system featuring user registration, two-factor authentication via OTP codes, profile management, and login history tracking. Built as an educational project to demonstrate ORM relationships, password security, and CLI interface design.
+This project has evolved from a simple CLI authentication system to a full-featured web application with:
 
-## Domain Models
+- **CLI Interface**: Original command-line authentication (for learning)
+- **Web API**: FastAPI backend with REST endpoints
+- **React Frontend**: Modern web interface with black/white/red theme
+- **Real OTP Delivery**: Gmail SMTP + Twilio SMS integration
+- **48+ Countries**: International phone number validation
+- **Secure 6-Digit OTP**: Cryptographically secure code generation
+
+##  Architecture
+
+```
+auth_system/
+├── 📁 backend/           # FastAPI Web API
+│   ├── main.py          # API endpoints & server
+│   ├── lib/             # Core services
+│   │   ├── models.py    # SQLAlchemy models
+│   │   ├── auth.py      # Password hashing
+│   │   ├── email_service.py  # Gmail SMTP
+│   │   ├── phone_service.py  # Twilio SMS
+│   │   └── otp_service.py    # OTP logic
+│   └── requirements.txt # Python dependencies
+├── 📁 frontend/         # React Web App
+│   └── Login-OTP/       # TypeScript React app
+├── 📁 main.py           # Original CLI interface
+├── 📁 lib/              # CLI services
+├── 📁 Dockerfile        # Container configuration
+├── 📁 SETUP_GUIDE.md    # Detailed setup instructions
+└── 📁 setup_services.py # Interactive service setup
+```
+
+##  Quick Start Commands
+
+### Option 1: Web Application (Recommended)
+
+```bash
+# Backend Setup
+cd backend
+python3 -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python migrate_database.py  # Fix database schema
+python setup_services.py   # Configure Gmail/Twilio
+
+# Frontend Setup
+cd ../frontend/Login-OTP
+npm install
+
+# Start Services
+# Terminal 1: Backend
+cd ../../backend
+source venv/bin/activate
+python main.py
+
+# Terminal 2: Frontend
+cd ../frontend/Login-OTP
+npm run dev
+
+# Access: http://localhost:5173
+```
+
+### Option 2: CLI Interface (Original)
+
+```bash
+# Setup CLI
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Run CLI
+python main.py
+```
+
+##  Data Models (CLI Style)
+
+###  User Model
+
+```python
+class User:
+    id: int                    # Primary key
+    username: str              # Unique, min 3 chars
+    email: str                 # Unique, valid email
+    phone_number: str          # Optional, with country code
+    password: str              # Hashed with bcrypt
+    created_at: datetime       # Registration timestamp
+
+    # Relationships
+    otp_codes: List[OTP]       # One-to-many
+    login_attempts: List[LoginAttempt]  # One-to-many
+```
+
+###  OTP Model
+
+```python
+class OTP:
+    id: int                    # Primary key
+    user_id: int               # Foreign key to User
+    code: str                  # 6-digit secure random
+    created_at: datetime       # Generation time
+    expires_at: datetime       # 10 minutes expiry
+    is_used: bool              # Single-use flag
+
+    # Methods
+    is_expired() -> bool       # Check expiry
+    is_valid() -> bool         # Check if usable
+```
+
+###    LoginAttempt Model
+
+```python
+class LoginAttempt:
+    id: int                    # Primary key
+    user_id: int               # Foreign key to User
+    timestamp: datetime        # Attempt time
+    successful: bool           # Success/failure
+    ip_address: str            # Client IP (127.0.0.1)
+```
+
+##  Legacy Domain Models
 
 ### User
+
 1. Username must be unique and at least 3 characters long
 2. Email must be unique and contain "@" symbol
 3. Password must be at least 6 characters long
@@ -17,6 +134,7 @@ This CLI application implements a complete authentication system featuring user 
 6. Has many login attempts (one-to-many relationship)
 
 ### OTP (One-Time Password)
+
 1. User must be a User instance (foreign key relationship)
 2. Code is a 6-digit random number
 3. Expires after 10 minutes from creation
@@ -24,6 +142,7 @@ This CLI application implements a complete authentication system featuring user 
 5. Validates expiration before accepting
 
 ### LoginAttempt
+
 1. User must be a User instance (foreign key relationship)
 2. Tracks timestamp of each login attempt
 3. Records success or failure status
@@ -57,14 +176,16 @@ update_user(username="existing_name")  # Returns: "Username already taken"
 ### Quick Start (Single File Version)
 
 1. **Install dependencies** (one-time setup):
+
 ```bash
 pip install sqlalchemy bcrypt
 ```
 
 2. **Save the code**:
-Copy the code from the artifact above and save as `auth_app.py`
+   Copy the code from the artifact above and save as `auth_app.py`
 
 3. **Run the application**:
+
 ```bash
 python auth_app.py
 ```
@@ -97,6 +218,7 @@ pipenv run python cli.py
 The application is interactive and tests itself through the CLI interface:
 
 1. **Test Registration**:
+
 ```bash
 python auth_app.py
 # Select option 1 (Register)
@@ -109,6 +231,7 @@ python auth_app.py
 ```
 
 2. **Test Login & OTP**:
+
 ```bash
 # Select option 2 (Login)
 # Enter registered email and password
@@ -118,6 +241,7 @@ python auth_app.py
 ```
 
 3. **Test Dashboard Features**:
+
 ```bash
 # After successful login:
 # Test option 1 - View Profile
@@ -140,58 +264,65 @@ pytest
 ## Features Implemented
 
 ### Core Features
-* User registration with validation
-* Secure password hashing (bcrypt)
-* Email and password authentication
-* OTP generation and verification
-* Two-factor authentication flow
-* User dashboard with profile management
-* Profile update (username, email, password)
-* Login history tracking
-* Account deletion with cascade
+
+- User registration with validation
+- Secure password hashing (bcrypt)
+- Email and password authentication
+- OTP generation and verification
+- Two-factor authentication flow
+- User dashboard with profile management
+- Profile update (username, email, password)
+- Login history tracking
+- Account deletion with cascade
 
 ### Technical Features
-*  SQLAlchemy ORM with 3 related tables
-*  One-to-many relationships (User → OTP, User → LoginAttempt)
-*  Property decorators for password management
-*  Input validation with clear error messages
-*  Session management
-*  Database auto-initialization
-*  Clean CLI interface with menus and navigation
+
+- SQLAlchemy ORM with 3 related tables
+- One-to-many relationships (User → OTP, User → LoginAttempt)
+- Property decorators for password management
+- Input validation with clear error messages
+- Session management
+- Database auto-initialization
+- Clean CLI interface with menus and navigation
 
 ### Security Features
-*  Password hashing with bcrypt salt
-*  OTP expiration (10 minutes)
-*  One-time use OTP codes
-*  Failed login attempt tracking
-*  Secure credential validation
+
+- Password hashing with bcrypt salt
+- OTP expiration (10 minutes)
+- One-time use OTP codes
+- Failed login attempt tracking
+- Secure credential validation
 
 ## Design Decisions
 
 ### Database Design
-* **SQLite**: Chosen for simplicity - no server required, perfect for learning
-* **ORM Pattern**: SQLAlchemy provides clean abstraction over SQL
-* **Cascade Deletion**: When a user is deleted, all related OTP codes and login attempts are automatically removed
-* **Relationships**: Explicit one-to-many relationships using foreign keys
+
+- **SQLite**: Chosen for simplicity - no server required, perfect for learning
+- **ORM Pattern**: SQLAlchemy provides clean abstraction over SQL
+- **Cascade Deletion**: When a user is deleted, all related OTP codes and login attempts are automatically removed
+- **Relationships**: Explicit one-to-many relationships using foreign keys
 
 ### Security Design
-* **Bcrypt Hashing**: Industry-standard password hashing with automatic salting
-* **OTP Expiration**: Time-based expiration prevents replay attacks
-* **Single Use OTPs**: is_used flag ensures codes can't be reused
-* **Validation**: All inputs validated before database operations
+
+- **Bcrypt Hashing**: Industry-standard password hashing with automatic salting
+- **OTP Expiration**: Time-based expiration prevents replay attacks
+- **Single Use OTPs**: is_used flag ensures codes can't be reused
+- **Validation**: All inputs validated before database operations
 
 ### Code Organization
-* **Single File Version**: All code in one file for easy deployment and learning
-* **Service Layer**: AuthService separates business logic from database operations
-* **CLI Separation**: Clean separation between interface and logic
-* **Method Organization**: Grouped by functionality (auth, profile, history)
+
+- **Single File Version**: All code in one file for easy deployment and learning
+- **Service Layer**: AuthService separates business logic from database operations
+- **CLI Separation**: Clean separation between interface and logic
+- **Method Organization**: Grouped by functionality (auth, profile, history)
 
 ### User Experience
-* **Clear Menus**: Numbered options with clear descriptions
-* **Visual Feedback**: Emojis and formatting for better readability
-* **Error Messages**: Descriptive messages for all validation failures
-* **Confirmation Prompts**: Dangerous operations (delete) require explicit confirmation
-* **Session Persistence**: User stays logged in until manual logout
+
+- **Clear Menus**: Numbered options with clear descriptions
+- **Visual Feedback**: Emojis and formatting for better readability
+- **Error Messages**: Descriptive messages for all validation failures
+- **Confirmation Prompts**: Dangerous operations (delete) require explicit confirmation
+- **Session Persistence**: User stays logged in until manual logout
 
 ## Database Schema
 
@@ -222,6 +353,7 @@ login_attempts
 ## File Structure
 
 ### Single File Version
+
 ```
 auth-system/
 ├── auth_app.py          # Complete application (all-in-one)
@@ -229,6 +361,7 @@ auth-system/
 ```
 
 ### Modular Version
+
 ```
 auth-system/
 ├── models/
@@ -250,6 +383,7 @@ auth-system/
 ## Usage Examples
 
 ### Registration Flow
+
 ```
    AUTHENTICATION SYSTEM
 1. Register
@@ -269,6 +403,7 @@ Welcome, john_doe! You can now login.
 ```
 
 ### Login Flow
+
 ```
    USER LOGIN
 Enter email: john@example.com
@@ -286,6 +421,7 @@ Enter OTP code: 123456
 ```
 
 ### Dashboard
+
 ```
   DASHBOARD - Welcome, john_doe!
 
@@ -333,6 +469,7 @@ The current version **simulates email** by printing to console. To enable real e
 ## Future Enhancements
 
 Potential improvements for learning:
+
 - [ ] Add email verification on registration
 - [ ] Implement password reset functionality
 - [ ] Add session timeout
@@ -377,11 +514,12 @@ Created as part of Authentication System Project - demonstrating SQLAlchemy ORM,
 ## Learning Outcomes
 
 By studying this project, you'll learn:
--   SQLAlchemy ORM and database relationships
--   Secure password hashing with bcrypt
--   Two-factor authentication implementation
--   CLI application design patterns
--   Input validation and error handling
--   Session management
--   Database schema design
--   Clean code organization and separation of concerns
+
+- SQLAlchemy ORM and database relationships
+- Secure password hashing with bcrypt
+- Two-factor authentication implementation
+- CLI application design patterns
+- Input validation and error handling
+- Session management
+- Database schema design
+- Clean code organization and separation of concerns
