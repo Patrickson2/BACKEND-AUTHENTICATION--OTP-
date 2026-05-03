@@ -1,0 +1,48 @@
+# Docker ignore file
+# Exclude common development files
+node_modules
+npm-debug.log
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+venv
+env
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# Exclude frontend development files
+frontend/Login-OTP/node_modules
+frontend/Login-OTP/dist
+frontend/Login-OTP/.git
+frontend/Login-OTP/.gitignore
+
+# Include only necessary files
+!frontend/Login-OTP/package.json
+!frontend/Login-OTP/package-lock.json
+!frontend/Login-OTP/index.html
+!frontend/Login-OTP/src
+!frontend/Login-OTP/public
+!frontend/Login-OTP/vite.config.ts
+!backend/requirements.txt
+!backend/main.py
+!backend/lib

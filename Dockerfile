@@ -1,5 +1,5 @@
 # Multi-stage build for frontend and backend
-FROM node:18-alpine AS frontend-build
+FROM node:20-alpine AS frontend-build
 
 # Set working directory for frontend
 WORKDIR /app/frontend
