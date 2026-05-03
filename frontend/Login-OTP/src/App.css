@@ -502,24 +502,417 @@ body {
   letter-spacing: 1px;
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .app-header {
-    padding: 1rem;
-  }
+/* Comprehensive Responsive Design */
 
-  .app-header h1 {
-    font-size: 1.25rem;
+/* Extra Large Devices (1200px and up) - Desktops */
+@media (min-width: 1200px) {
+  .app-container {
+    max-width: 1200px;
+    margin: 0 auto;
   }
-
-  .app-main {
-    padding: 1rem;
-  }
-
+  
   .login-container,
   .otp-select-container,
   .otp-verify-container,
   .success-container {
+    max-width: 500px;
+    margin: 2rem auto;
+  }
+}
+
+/* Large Devices (992px to 1199px) - Laptops/Desktops */
+@media (max-width: 1199px) {
+  .app-header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .login-container,
+  .otp-select-container,
+  .otp-verify-container,
+  .success-container {
+    max-width: 450px;
+    margin: 1.5rem auto;
+  }
+}
+
+/* Medium Devices (768px to 991px) - Tablets (iPad, Android Tablets) */
+@media (max-width: 991px) {
+  .app-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .app-main {
     padding: 1.5rem;
+  }
+  
+  .login-container,
+  .otp-select-container,
+  .otp-verify-container,
+  .success-container {
+    max-width: 400px;
+    margin: 1rem auto;
+    padding: 2rem;
+  }
+  
+  .auth-form h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 0.65rem;
+    font-size: 0.95rem;
+  }
+  
+  .submit-btn {
+    padding: 0.65rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Devices (576px to 767px) - Large Phones/Small Tablets */
+@media (max-width: 767px) {
+  .app-header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .app-header h1 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .logout-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .app-main {
+    padding: 1rem;
+  }
+  
+  .login-container,
+  .otp-select-container,
+  .otp-verify-container,
+  .success-container {
+    margin: 0.5rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .auth-form h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 0.8rem;
+  }
+  
+  .form-group label {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+  
+  .country-search {
+    padding: 0.45rem;
+    font-size: 0.85rem;
+  }
+  
+  .country-select {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+  
+  .submit-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  .password-toggle-btn {
+    padding: 0.4rem;
+    font-size: 0.85rem;
+  }
+  
+  .delivery-option {
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .delivery-option label {
+    font-size: 0.9rem;
+  }
+  
+  .otp-input-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .otp-input {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Extra Small Devices (320px to 575px) - Small Phones (iPhone SE, Android Small) */
+@media (max-width: 575px) {
+  .app-header {
+    padding: 0.8rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .logout-btn {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .app-main {
+    padding: 0.5rem;
+  }
+  
+  .login-container,
+  .otp-select-container,
+  .otp-verify-container,
+  .success-container {
+    margin: 0.25rem;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+  
+  .auth-form h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .form-toggle {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .form-toggle button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .form-group {
+    margin-bottom: 0.6rem;
+  }
+  
+  .form-group label {
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .country-search {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+  }
+  
+  .country-select {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .submit-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .password-toggle-btn {
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    right: 0.3rem;
+  }
+  
+  .delivery-option {
+    padding: 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .delivery-option label {
+    font-size: 0.85rem;
+  }
+  
+  .method-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .otp-input-group {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  
+  .otp-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+  
+  .back-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .success-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .success-container h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .success-container p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Ultra Small Devices (280px to 319px) - Very Small Phones */
+@media (max-width: 319px) {
+  .app-header h1 {
+    font-size: 1rem;
+  }
+  
+  .logout-btn {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  
+  .login-container,
+  .otp-select-container,
+  .otp-verify-container,
+  .success-container {
+    padding: 0.8rem;
+  }
+  
+  .auth-form h2 {
+    font-size: 1.1rem;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+  }
+  
+  .submit-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Landscape Orientation for Mobile Devices */
+@media (max-height: 500px) and (orientation: landscape) {
+  .app-header {
+    padding: 0.5rem 1rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1rem;
+  }
+  
+  .login-container,
+  .otp-select-container,
+  .otp-verify-container,
+  .success-container {
+    margin: 0.5rem auto;
+    padding: 1rem;
+    max-width: 500px;
+  }
+  
+  .auth-form h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* High DPI/Retina Display Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .app-header {
+    border-bottom-width: 1px;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .country-search,
+  .country-select {
+    border-width: 1px;
+  }
+  
+  .submit-btn,
+  .logout-btn {
+    border-width: 1px;
+  }
+}
+
+/* iPhone X and newer (notch) optimization */
+@supports (padding: max(0px)) {
+  @media (max-width: 414px) {
+    .app-container {
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+    
+    .app-header {
+      padding-top: calc(env(safe-area-inset-top) + 0.5rem);
+    }
+  }
+}
+
+/* Android devices optimization */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .form-group input,
+  .form-group select {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 0;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .submit-btn:hover,
+  .logout-btn:hover,
+  .form-toggle button:hover {
+    transform: none;
+  }
+  
+  .submit-btn:active,
+  .logout-btn:active,
+  .form-toggle button:active {
+    transform: scale(0.95);
+  }
+  
+  .password-toggle-btn {
+    padding: 0.5rem;
   }
 }
