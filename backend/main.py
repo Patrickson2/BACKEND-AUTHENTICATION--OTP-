@@ -38,7 +38,7 @@ app = FastAPI(title="OTP Authentication API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://backend-authentication-otp-rn77-8oouwou7v-patrickson-s-projects.vercel.app",
+        "https://backend-authentication-otp-6kyb.vercel.app/",
         "http://localhost:5173",
         "http://localhost:3000"
     ],  # Allow specific origins
