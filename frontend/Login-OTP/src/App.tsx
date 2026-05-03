@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-// API base URL - use live backend in production, localhost in development
-const API_URL = window.location.hostname === 'localhost' 
-  ? "http://localhost:8000/api" 
-  : "https://backend-authentication-otp.onrender.com/api";
+// API base URL
+const API_URL = "https://backend-authentication-otp.onrender.com/api";
 
 interface UserInfo {
   user_id: number;

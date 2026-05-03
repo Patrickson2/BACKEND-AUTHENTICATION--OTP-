@@ -37,9 +37,13 @@ app = FastAPI(title="OTP Authentication API")
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
+    allow_origins=[
+        "https://backend-authentication-otp-rn77-8oouwou7v-patrickson-s-projects.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:3000"
+    ],  # Allow specific origins
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
 
