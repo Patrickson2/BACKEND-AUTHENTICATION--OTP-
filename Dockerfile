@@ -13,8 +13,8 @@ RUN npm ci
 # Copy frontend source code
 COPY frontend/Login-OTP/ .
 
-# Build frontend
-RUN npm run build
+# Force cache invalidation and build frontend
+RUN touch /app/frontend/.build-cache-bust && npm run build
 
 # Backend stage
 FROM python:3.11-slim
