@@ -313,12 +313,20 @@ def get_countries():
 @app.get("/api/test-services")
 def test_services():
     """Test email and SMS services configuration"""
-    email_test = email_service.test_connection()
+    email_configured = email_service.is_configured
+    email_test = email_service.test_connection() if email_configured else False
     sms_test = phone_service.test_sms_service()
     
     return {
-        "email_service": "configured" if email_test else "not configured",
-        "sms_service": "configured" if sms_test else "not configured"
+        "email_service": {
+            "configured": email_configured,
+            "connection_test": email_test,
+            "sender_email": email_service.sender_email if email_configured else None
+        },
+        "sms_service": {
+            "configured": sms_test,
+            "connection_test": sms_test
+        }
     }
 
 @app.get("/api/debug/users")
