@@ -17,6 +17,30 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Validate critical environment variables
+def validate_env_vars():
+    """Validate required environment variables"""
+    required_vars = ["GMAIL_EMAIL", "GMAIL_APP_PASSWORD"]
+    missing_vars = []
+    
+    for var in required_vars:
+        if not os.getenv(var):
+            missing_vars.append(var)
+    
+    if missing_vars:
+        print(f"❌ Missing environment variables: {', '.join(missing_vars)}")
+        print("🔧 Please set these environment variables:")
+        for var in missing_vars:
+            print(f"   export {var}='your_value'")
+        return False
+    
+    print("✅ Environment variables validated")
+    return True
+
+# Validate on startup
+if not validate_env_vars():
+    print("⚠️  Running in development mode (some features may not work)")
+
 # Import database and models
 from lib.database import Base
 from lib.models import User, OTP, LoginAttempt
