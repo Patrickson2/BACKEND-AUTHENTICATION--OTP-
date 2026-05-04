@@ -28,18 +28,18 @@ def validate_env_vars():
             missing_vars.append(var)
     
     if missing_vars:
-        print(f"❌ Missing environment variables: {', '.join(missing_vars)}")
-        print("🔧 Please set these environment variables:")
+        print(f"Missing environment variables: {', '.join(missing_vars)}")
+        print("Please set these environment variables:")
         for var in missing_vars:
             print(f"   export {var}='your_value'")
         return False
     
-    print("✅ Environment variables validated")
+    print("Environment variables validated")
     return True
 
 # Validate on startup
 if not validate_env_vars():
-    print("⚠️  Running in development mode (some features may not work)")
+    print("  Running in development mode (some features may not work)")
 
 # Import database and models
 from lib.database import Base
@@ -193,20 +193,20 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     """First step of login - verify credentials, return user info"""
     
-    print(f"🔐 Login attempt for email: {request.email}")
+    print(f"Login attempt for email: {request.email}")
     
     # Find user by email
     user = db.query(User).filter(User.email == request.email).first()
     
     if not user:
-        print(f"❌ User not found: {request.email}")
+        print(f"User not found: {request.email}")
         raise HTTPException(status_code=401, detail="User not found. Please register first.")
     
-    print(f"👤 User found: {user.username} (ID: {user.id})")
+    print(f"User found: {user.username} (ID: {user.id})")
     
     # Check password
     if not check_password(request.password, user.password):
-        print(f"❌ Password mismatch for user: {user.email}")
+        print(f"Password mismatch for user: {user.email}")
         # Record failed attempt
         failed_attempt = LoginAttempt(
             user_id=user.id,
@@ -217,7 +217,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         db.commit()
         raise HTTPException(status_code=401, detail="Invalid password. Please try again.")
     
-    print(f"✅ Login successful for: {user.username}")
+    print(f"Login successful for: {user.username}")
     
     # Return user info (for OTP selection step)
     return {
