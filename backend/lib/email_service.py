@@ -19,6 +19,12 @@ class EmailService:
         self.sender_email = os.getenv("GMAIL_EMAIL", "your-email@gmail.com")
         self.sender_password = os.getenv("GMAIL_APP_PASSWORD", "your-app-password")
         
+        # Debug: Print configuration (without password)
+        print(f"🔧 Email Service initialized:")
+        print(f"   SMTP Server: {self.smtp_server}:{self.smtp_port}")
+        print(f"   Sender Email: {self.sender_email}")
+        print(f"   App Password: {'✅ Set' if self.sender_password != 'your-app-password' else '❌ Not set'}")
+    
     def send_otp_email(self, recipient_email: str, otp_code: str, username: str) -> bool:
         """
         Send OTP code to user's email address
@@ -31,6 +37,10 @@ class EmailService:
         Returns:
             bool: True if email sent successfully, False otherwise
         """
+        print(f"📧 Attempting to send OTP to: {recipient_email}")
+        print(f"   OTP Code: {otp_code}")
+        print(f"   Username: {username}")
+        
         try:
             # Create message
             message = MIMEMultipart("alternative")
@@ -84,7 +94,7 @@ class EmailService:
             </head>
             <body>
                 <div class="container">
-                    <div class="header"> Your OTP Verification Code</div>
+                    <div class="header">Your OTP Verification Code</div>
                     <p>Hello <strong>{username}</strong>,</p>
                     <p>Use the following OTP code to complete your login:</p>
                     <div class="otp-code">{otp_code}</div>
@@ -103,14 +113,32 @@ class EmailService:
             message.attach(html_part)
             
             # Create secure connection and send email
+            print("🔐 Creating secure SMTP connection...")
             context = ssl.create_default_context()
+            
             with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                print("🔗 Connecting to Gmail SMTP server...")
                 server.starttls(context=context)
+                print("🔑 Logging into Gmail...")
                 server.login(self.sender_email, self.sender_password)
+                print("📤 Sending email...")
                 server.sendmail(self.sender_email, recipient_email, message.as_string())
-                
-            print(f"✅ OTP email sent to {recipient_email}")
+            
+            print(f"✅ OTP email sent successfully to {recipient_email}")
             return True
+            
+        except smtplib.SMTPAuthenticationError as e:
+            print(f"❌ Gmail authentication failed: {str(e)}")
+            print("🔧 Possible causes:")
+            print("   1. Incorrect app password")
+            print("   2. 2-factor authentication not enabled")
+            print("   3. App password not generated correctly")
+            print("   4. Gmail account blocking less secure apps")
+            return False
+            
+        except smtplib.SMTPException as e:
+            print(f"❌ SMTP error occurred: {str(e)}")
+            return False
             
         except Exception as e:
             print(f"❌ Failed to send email to {recipient_email}: {str(e)}")
@@ -124,21 +152,30 @@ class EmailService:
     
     def test_connection(self) -> bool:
         """Test SMTP connection"""
+        print("🧪 Testing Gmail SMTP connection...")
         try:
             context = ssl.create_default_context()
+            
             with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                print("🔗 Connecting to Gmail SMTP server...")
                 server.starttls(context=context)
+                print("🔑 Testing Gmail login...")
                 server.login(self.sender_email, self.sender_password)
-            print("✅ Gmail SMTP connection successful")
-            return True
-        except Exception as e:
-            print(f"❌ Gmail SMTP connection failed: {str(e)}")
+                print("✅ Gmail SMTP connection successful!")
+                return True
+                
+        except smtplib.SMTPAuthenticationError as e:
+            print(f"❌ Gmail authentication failed: {str(e)}")
             print("📧 Please set up your Gmail App Password:")
             print("1. Enable 2-factor authentication on your Google account")
             print("2. Generate an App Password (Settings → Security → App Passwords)")
             print("3. Set environment variables:")
             print("   export GMAIL_EMAIL='your-email@gmail.com'")
             print("   export GMAIL_APP_PASSWORD='your-app-password'")
+            return False
+            
+        except Exception as e:
+            print(f"❌ Gmail SMTP connection failed: {str(e)}")
             return False
 
 # Global email service instance
