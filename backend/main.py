@@ -169,14 +169,20 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     """First step of login - verify credentials, return user info"""
     
+    print(f"🔐 Login attempt for email: {request.email}")
+    
     # Find user by email
     user = db.query(User).filter(User.email == request.email).first()
     
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        print(f"❌ User not found: {request.email}")
+        raise HTTPException(status_code=401, detail="User not found. Please register first.")
+    
+    print(f"👤 User found: {user.username} (ID: {user.id})")
     
     # Check password
     if not check_password(request.password, user.password):
+        print(f"❌ Password mismatch for user: {user.email}")
         # Record failed attempt
         failed_attempt = LoginAttempt(
             user_id=user.id,
@@ -185,7 +191,9 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         )
         db.add(failed_attempt)
         db.commit()
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(status_code=401, detail="Invalid password. Please try again.")
+    
+    print(f"✅ Login successful for: {user.username}")
     
     # Return user info (for OTP selection step)
     return {
@@ -287,6 +295,25 @@ def test_services():
     return {
         "email_service": "configured" if email_test else "not configured",
         "sms_service": "configured" if sms_test else "not configured"
+    }
+
+@app.get("/api/debug/users")
+def debug_users(db: Session = Depends(get_db)):
+    """Debug endpoint to see all users (remove in production)"""
+    users = db.query(User).all()
+    return {
+        "users": [
+            {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "phone_number": user.phone_number,
+                "created_at": user.created_at,
+                "password_hash": user.password[:20] + "..." if user.password else None
+            }
+            for user in users
+        ],
+        "total_users": len(users)
     }
 
 if __name__ == "__main__":
