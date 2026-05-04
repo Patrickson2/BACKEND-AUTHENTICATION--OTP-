@@ -12,27 +12,47 @@
   "routes": [
     {
       "src": "/Logo.png",
-      "dest": "/Logo.png"
+      "dest": "/Logo.png",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000"
+      }
     },
     {
       "src": "/favicon.svg",
-      "dest": "/favicon.svg"
+      "dest": "/favicon.svg",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000"
+      }
     },
     {
       "src": "/assets/(.*)",
-      "dest": "/assets/$1"
+      "dest": "/assets/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000"
+      }
     },
     {
       "src": "/src/(.*)",
-      "dest": "/src/$1"
-    },
-    {
-      "src": "/(.*\\.(js|ts|jsx|tsx|css|json|png|jpg|jpeg|gif|svg|ico))",
-      "dest": "/$1"
+      "dest": "/src/$1",
+      "headers": {
+        "Content-Type": "application/javascript",
+        "Cache-Control": "public, max-age=0"
+      }
     },
     {
       "src": "/(.*)",
       "dest": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
     }
   ]
 }

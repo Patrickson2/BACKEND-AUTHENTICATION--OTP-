@@ -21,6 +21,7 @@ function App() {
   const [selectedCountryCode, setSelectedCountryCode] = useState("+1");
   const [error, setError] = useState("");
   const [countryCodes, setCountryCodes] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch country codes on component mount
   useEffect(() => {
@@ -203,6 +204,11 @@ function App() {
 
     if (!userInfo) return;
 
+    setIsLoading(true);
+    
+    // Show immediate feedback
+    setError(`Sending OTP via ${deliveryMethod === "email" ? "Email" : "SMS"}...`);
+
     try {
       const response = await fetch(`${API_URL}/generate-otp`, {
         method: "POST",
@@ -217,13 +223,23 @@ function App() {
 
       if (!response.ok) {
         setError(data.detail || "Failed to generate OTP");
+        setIsLoading(false);
         return;
       }
 
-      setOtpCode(data.otp_code);
-      setPage("otp-verify");
+      // Clear the sending message
+      setError("");
+      
+      // Auto-navigate to OTP verification after 1 second
+      setTimeout(() => {
+        setOtpCode(data.otp_code);
+        setPage("otp-verify");
+        setIsLoading(false);
+      }, 1000);
+      
     } catch (err) {
       setError("Failed to connect to server");
+      setIsLoading(false);
     }
   };
 
@@ -233,6 +249,8 @@ function App() {
     setError("");
 
     if (!userInfo) return;
+
+    setIsLoading(true);
 
     try {
       const response = await fetch(`${API_URL}/verify-otp`, {
@@ -248,12 +266,15 @@ function App() {
 
       if (!response.ok) {
         setError(data.detail || "Invalid OTP code");
+        setIsLoading(false);
         return;
       }
 
       setPage("success");
+      setIsLoading(false);
     } catch (err) {
       setError("Failed to connect to server");
+      setIsLoading(false);
     }
   };
 
@@ -494,8 +515,19 @@ function App() {
 
             {error && <div className="error-message">{error}</div>}
 
-            <button onClick={handleGenerateOTP} className="submit-btn">
-              Send OTP via {deliveryMethod === "email" ? "Email" : "SMS"}
+            <button 
+              onClick={handleGenerateOTP} 
+              className="submit-btn"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <i className="fas fa-spinner fa-spin"></i>
+                  {" "}Sending...
+                </>
+              ) : (
+                <>Send OTP via {deliveryMethod === "email" ? "Email" : "SMS"}</>
+              )}
             </button>
           </div>
         )}
@@ -528,8 +560,15 @@ function App() {
 
               {error && <div className="error-message">{error}</div>}
 
-              <button type="submit" className="submit-btn">
-                Verify & Login
+              <button type="submit" className="submit-btn" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin"></i>
+                    {" "}Verifying...
+                  </>
+                ) : (
+                  "Verify & Login"
+                )}
               </button>
             </form>
 
