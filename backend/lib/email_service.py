@@ -16,14 +16,14 @@ class EmailService:
         # Gmail SMTP configuration
         self.smtp_server = "smtp.gmail.com"
         self.smtp_port = 587  # For TLS
-        self.sender_email = os.getenv("GMAIL_EMAIL", "your-email@gmail.com")
-        self.sender_password = os.getenv("GMAIL_APP_PASSWORD", "your-app-password")
+        self.sender_email = os.getenv("GMAIL_EMAIL", "patricksonthairu@gmail.com")
+        self.sender_password = os.getenv("GMAIL_APP_PASSWORD", "onogujxxbkyndnls")
         
         # Debug: Print configuration (without password)
-        print(f"🔧 Email Service initialized:")
+        print(f" Email Service initialized:")
         print(f"   SMTP Server: {self.smtp_server}:{self.smtp_port}")
         print(f"   Sender Email: {self.sender_email}")
-        print(f"   App Password: {'✅ Set' if self.sender_password != 'your-app-password' else '❌ Not set'}")
+        print(f"   App Password: {' Set' if self.sender_password != 'your-app-password' else ' Not set'}")
     
     def send_otp_email(self, recipient_email: str, otp_code: str, username: str) -> bool:
         """
@@ -37,7 +37,7 @@ class EmailService:
         Returns:
             bool: True if email sent successfully, False otherwise
         """
-        print(f"📧 Attempting to send OTP to: {recipient_email}")
+        print(f" Attempting to send OTP to: {recipient_email}")
         print(f"   OTP Code: {otp_code}")
         print(f"   Username: {username}")
         
