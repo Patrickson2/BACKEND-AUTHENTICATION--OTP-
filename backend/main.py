@@ -348,6 +348,27 @@ def debug_users(db: Session = Depends(get_db)):
         "total_users": len(users)
     }
 
+@app.get("/api/debug/test-email")
+def debug_test_email(email: str = "test@example.com"):
+    """Debug endpoint to test email delivery"""
+    import random
+    
+    # Generate test OTP
+    otp_code = f"{random.randint(100000, 999999)}"
+    username = "TestUser"
+    
+    print(f"Debug: Testing email to {email}")
+    
+    # Test email delivery
+    result = email_service.send_otp_email(email, otp_code, username)
+    
+    return {
+        "email": email,
+        "otp_code": otp_code,
+        "sent_successfully": result,
+        "message": f"Test email {'sent' if result else 'failed'} to {email}"
+    }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
