@@ -16,7 +16,7 @@ class SendGridService:
         
         # SendGrid configuration
         self.api_key = os.getenv("SENDGRID_API_KEY")
-        self.from_email = os.getenv("SENDGRID_FROM_EMAIL", "noreply@auth-system.com")
+        self.from_email = os.getenv("SENDGRID_FROM_EMAIL", "patricksonthairu@gmail.com")
         self.from_name = os.getenv("SENDGRID_FROM_NAME", "Authentication System")
         
         # Debug: Print configuration
