@@ -20,8 +20,7 @@ load_dotenv()
 # Validate critical environment variables
 def validate_env_vars():
     """Validate required environment variables"""
-    required_vars = ["RESEND_API_KEY"]
-    optional_vars = ["GMAIL_EMAIL", "GMAIL_APP_PASSWORD"]
+    required_vars = ["SENDGRID_API_KEY"]
     missing_vars = []
     
     for var in required_vars:
@@ -29,18 +28,11 @@ def validate_env_vars():
             missing_vars.append(var)
     
     if missing_vars:
-        print(f"Missing required environment variables: {', '.join(missing_vars)}")
+        print(f"Missing environment variables: {', '.join(missing_vars)}")
         print("Please set these environment variables:")
         for var in missing_vars:
             print(f"   export {var}='your_value'")
         return False
-    
-    # Check optional variables
-    for var in optional_vars:
-        if os.getenv(var):
-            print(f"Optional {var}: Set")
-        else:
-            print(f"Optional {var}: Not set")
     
     print("Environment variables validated")
     return True
@@ -53,7 +45,7 @@ if not validate_env_vars():
 from lib.database import Base
 from lib.models import User, OTP, LoginAttempt
 from lib.auth import hash_password, check_password
-from lib.email_service import email_service
+from lib.sendgrid_service import sendgrid_service
 from lib.phone_service import phone_service
 
 # Database configuration
@@ -249,7 +241,7 @@ def generate_otp(request: OTPSelectionRequest, db: Session = Depends(get_db)):
     # Send OTP via selected method
     success = False
     if request.delivery_method == "email":
-        success = email_service.send_otp_email(user.email, otp_code, user.username)
+        success = sendgrid_service.send_otp_email(user.email, otp_code, user.username)
     elif request.delivery_method == "sms":
         success = phone_service.send_otp_sms(user.phone_number, otp_code, user.username)
     
@@ -321,15 +313,15 @@ def get_countries():
 @app.get("/api/test-services")
 def test_services():
     """Test email and SMS services configuration"""
-    email_configured = email_service.is_configured
-    email_test = email_service.test_connection() if email_configured else False
+    email_configured = sendgrid_service.is_configured
+    email_test = sendgrid_service.test_connection() if email_configured else False
     sms_test = phone_service.test_sms_service()
     
     return {
         "email_service": {
             "configured": email_configured,
             "connection_test": email_test,
-            "sender_email": email_service.sender_email if email_configured else None
+            "sender_email": sendgrid_service.from_email if email_configured else None
         },
         "sms_service": {
             "configured": sms_test,
@@ -368,7 +360,7 @@ def debug_test_email(email: str = "test@example.com"):
     print(f"Debug: Testing email to {email}")
     
     # Test email delivery
-    result = email_service.send_otp_email(email, otp_code, username)
+    result = sendgrid_service.send_otp_email(email, otp_code, username)
     
     return {
         "email": email,
@@ -378,54 +370,5 @@ def debug_test_email(email: str = "test@example.com"):
     }
 
 if __name__ == "__main__":
-    import sys
-    
-    # Check if CLI mode
-    if len(sys.argv) > 1 and sys.argv[1] == "cli":
-        run_cli_mode()
-    else:
-        import uvicorn
-        uvicorn.run(app, host="0.0.0.0", port=8000)
-
-def run_cli_mode():
-    """CLI mode for OTP generation"""
-    print("🔐 CLI Mode - OTP Generation")
-    print("=" * 50)
-    
-    # Get user email
-    email = input("Enter your email address: ").strip()
-    if not email or "@" not in email:
-        print("❌ Invalid email address")
-        return
-    
-    # Check if user exists
-    from lib.database import SessionLocal
-    db = SessionLocal()
-    
-    try:
-        user = db.query(User).filter(User.email == email).first()
-        if not user:
-            print(f"❌ User with email {email} not found")
-            print("Please register first using the web interface")
-            return
-        
-        print(f"✅ User found: {user.username}")
-        
-        # Generate OTP
-        otp_code = create_new_otp(db, user.id)
-        
-        # Send OTP
-        print(f"📧 Sending OTP to {email}...")
-        success = email_service.send_otp_email(email, otp_code, user.username)
-        
-        if success:
-            print(f"✅ OTP sent successfully to {email}")
-            print(f"🔢 Your OTP code: {otp_code}")
-            print(f"⏰ Valid for 10 minutes")
-        else:
-            print(f"❌ Failed to send OTP to {email}")
-        
-    except Exception as e:
-        print(f"❌ Error: {str(e)}")
-    finally:
-        db.close()
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

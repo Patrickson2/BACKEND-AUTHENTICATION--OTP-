@@ -4,12 +4,12 @@
 
 ## System Overview
 
-This project provides multiple authentication methods with professional OTP delivery:
+This project has evolved from a simple CLI authentication system to a full-featured web application with:
 
-- **Web Application**: Modern React frontend with FastAPI backend
-- **CLI Interface**: Command-line OTP generation for quick access
-- **Professional Email**: Resend API for reliable email delivery
-- **SMS Support**: Twilio integration for mobile OTP
+- **CLI Interface**: Original command-line authentication (for learning)
+- **Web API**: FastAPI backend with REST endpoints
+- **React Frontend**: Modern web interface with black/white/red theme
+- **Real OTP Delivery**: SendGrid API + Twilio SMS integration
 - **48+ Countries**: International phone number validation
 - **Secure 6-Digit OTP**: Cryptographically secure code generation
 
@@ -22,7 +22,8 @@ auth_system/
 │   ├── lib/             # Core services
 │   │   ├── models.py    # SQLAlchemy models
 │   │   ├── auth.py      # Password hashing
-│   │   ├── email_service.py  # Gmail SMTP
+│   │   ├── email_service.py  # Gmail SMTP (legacy)
+│   │   ├── sendgrid_service.py  # SendGrid API (current)
 │   │   ├── phone_service.py  # Twilio SMS
 │   │   └── otp_service.py    # OTP logic
 │   └── requirements.txt # Python dependencies
@@ -39,37 +40,48 @@ auth_system/
 
 ### Option 1: Web Application (Recommended)
 
-```bash
+````bash
 # Backend Setup
 cd backend
 python3 -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-python setup_services.py   # Configure Resend/Twilio
+python migrate_database.py  # Fix database schema
+python setup_services.py   # Configure SendGrid/Twilio
 
-# Start Backend
-python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+### Option 2: SendGrid API Setup (Required for Email OTP)
 
-# Start Frontend (New Terminal)
-cd frontend/Login-OTP
-npm run dev
-```
+1. **Create SendGrid Account**:
+   - Go to [SendGrid.com](https://sendgrid.com)
+   - Sign up for a free account
+   - Verify your email address
 
-### Option 2: CLI Mode (Quick OTP Generation)
+2. **Generate API Key**:
+   - Go to Settings → API Keys
+   - Create new API key
+   - Copy the API key (starts with `SG.`)
 
-```bash
-# Direct OTP Generation via CLI
-cd backend
-python3 main.py cli
+3. **Configure Environment Variables**:
+   ```bash
+   # Add to backend/.env
+   SENDGRID_API_KEY=SG.your_api_key_here
+   SENDGRID_FROM_EMAIL=noreply@yourdomain.com
+   SENDGRID_FROM_NAME=Your App Name
+````
 
-# Example CLI Session:
-Enter your email address: user@example.com
-✅ User found: JohnDoe
-📧 Sending OTP to user@example.com...
-✅ OTP sent successfully to user@example.com
-🔢 Your OTP code: 123456
-⏰ Valid for 10 minutes
-```
+4. **Test SendGrid Service**:
+   ```bash
+   cd backend
+   python3 -c "from lib.sendgrid_service import sendgrid_service; sendgrid_service.test_connection()"
+   ```
+
+**Benefits of SendGrid over Gmail SMTP**:
+
+- ✅ **Higher deliverability** - Professional email service
+- ✅ **Better analytics** - Track email delivery
+- ✅ **No rate limits** - SendGrid handles scaling
+- ✅ **Security** - API key instead of password
+- ✅ **Production ready** - Built for applications
 
 # Frontend Setup
 

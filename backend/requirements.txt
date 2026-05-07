@@ -9,4 +9,5 @@ secure-smtplib
 twilio
 phonenumbers
 python-dotenv
+sendgrid
 requests
