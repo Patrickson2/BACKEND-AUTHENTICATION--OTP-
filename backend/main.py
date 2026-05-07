@@ -20,7 +20,8 @@ load_dotenv()
 # Validate critical environment variables
 def validate_env_vars():
     """Validate required environment variables"""
-    required_vars = ["GMAIL_EMAIL", "GMAIL_APP_PASSWORD"]
+    required_vars = ["RESEND_API_KEY"]
+    optional_vars = ["GMAIL_EMAIL", "GMAIL_APP_PASSWORD"]
     missing_vars = []
     
     for var in required_vars:
@@ -28,11 +29,18 @@ def validate_env_vars():
             missing_vars.append(var)
     
     if missing_vars:
-        print(f"Missing environment variables: {', '.join(missing_vars)}")
+        print(f"Missing required environment variables: {', '.join(missing_vars)}")
         print("Please set these environment variables:")
         for var in missing_vars:
             print(f"   export {var}='your_value'")
         return False
+    
+    # Check optional variables
+    for var in optional_vars:
+        if os.getenv(var):
+            print(f"Optional {var}: Set")
+        else:
+            print(f"Optional {var}: Not set")
     
     print("Environment variables validated")
     return True
@@ -370,5 +378,54 @@ def debug_test_email(email: str = "test@example.com"):
     }
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import sys
+    
+    # Check if CLI mode
+    if len(sys.argv) > 1 and sys.argv[1] == "cli":
+        run_cli_mode()
+    else:
+        import uvicorn
+        uvicorn.run(app, host="0.0.0.0", port=8000)
+
+def run_cli_mode():
+    """CLI mode for OTP generation"""
+    print("🔐 CLI Mode - OTP Generation")
+    print("=" * 50)
+    
+    # Get user email
+    email = input("Enter your email address: ").strip()
+    if not email or "@" not in email:
+        print("❌ Invalid email address")
+        return
+    
+    # Check if user exists
+    from lib.database import SessionLocal
+    db = SessionLocal()
+    
+    try:
+        user = db.query(User).filter(User.email == email).first()
+        if not user:
+            print(f"❌ User with email {email} not found")
+            print("Please register first using the web interface")
+            return
+        
+        print(f"✅ User found: {user.username}")
+        
+        # Generate OTP
+        otp_code = create_new_otp(db, user.id)
+        
+        # Send OTP
+        print(f"📧 Sending OTP to {email}...")
+        success = email_service.send_otp_email(email, otp_code, user.username)
+        
+        if success:
+            print(f"✅ OTP sent successfully to {email}")
+            print(f"🔢 Your OTP code: {otp_code}")
+            print(f"⏰ Valid for 10 minutes")
+        else:
+            print(f"❌ Failed to send OTP to {email}")
+        
+    except Exception as e:
+        print(f"❌ Error: {str(e)}")
+    finally:
+        db.close()

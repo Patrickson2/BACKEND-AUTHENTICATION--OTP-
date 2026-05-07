@@ -9,3 +9,4 @@ secure-smtplib
 twilio
 phonenumbers
 python-dotenv
+requests

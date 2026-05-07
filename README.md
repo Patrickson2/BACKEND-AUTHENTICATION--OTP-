@@ -1,19 +1,19 @@
-#  OTP Authentication System
+# OTP Authentication System
 
 > A complete authentication system with CLI, Web API, and real OTP delivery via Email/SMS
 
-##  System Overview
+## System Overview
 
-This project has evolved from a simple CLI authentication system to a full-featured web application with:
+This project provides multiple authentication methods with professional OTP delivery:
 
-- **CLI Interface**: Original command-line authentication (for learning)
-- **Web API**: FastAPI backend with REST endpoints
-- **React Frontend**: Modern web interface with black/white/red theme
-- **Real OTP Delivery**: Gmail SMTP + Twilio SMS integration
+- **Web Application**: Modern React frontend with FastAPI backend
+- **CLI Interface**: Command-line OTP generation for quick access
+- **Professional Email**: Resend API for reliable email delivery
+- **SMS Support**: Twilio integration for mobile OTP
 - **48+ Countries**: International phone number validation
 - **Secure 6-Digit OTP**: Cryptographically secure code generation
 
-##  Architecture
+## Architecture
 
 ```
 auth_system/
@@ -35,7 +35,7 @@ auth_system/
 └── 📁 setup_services.py # Interactive service setup
 ```
 
-##  Quick Start Commands
+## Quick Start Commands
 
 ### Option 1: Web Application (Recommended)
 
@@ -45,25 +45,53 @@ cd backend
 python3 -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-python migrate_database.py  # Fix database schema
-python setup_services.py   # Configure Gmail/Twilio
+python setup_services.py   # Configure Resend/Twilio
+
+# Start Backend
+python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+
+# Start Frontend (New Terminal)
+cd frontend/Login-OTP
+npm run dev
+```
+
+### Option 2: CLI Mode (Quick OTP Generation)
+
+```bash
+# Direct OTP Generation via CLI
+cd backend
+python3 main.py cli
+
+# Example CLI Session:
+Enter your email address: user@example.com
+✅ User found: JohnDoe
+📧 Sending OTP to user@example.com...
+✅ OTP sent successfully to user@example.com
+🔢 Your OTP code: 123456
+⏰ Valid for 10 minutes
+```
 
 # Frontend Setup
+
 cd ../frontend/Login-OTP
 npm install
 
 # Start Services
+
 # Terminal 1: Backend
+
 cd ../../backend
 source venv/bin/activate
 python main.py
 
 # Terminal 2: Frontend
+
 cd ../frontend/Login-OTP
 npm run dev
 
 # Access: http://localhost:5173
-```
+
+````
 
 ### Option 2: CLI Interface (Original)
 
@@ -75,11 +103,11 @@ pip install -r requirements.txt
 
 # Run CLI
 python main.py
-```
+````
 
-##  Data Models (CLI Style)
+## Data Models (CLI Style)
 
-###  User Model
+### User Model
 
 ```python
 class User:
@@ -95,7 +123,7 @@ class User:
     login_attempts: List[LoginAttempt]  # One-to-many
 ```
 
-###  OTP Model
+### OTP Model
 
 ```python
 class OTP:
@@ -111,7 +139,7 @@ class OTP:
     is_valid() -> bool         # Check if usable
 ```
 
-###    LoginAttempt Model
+### LoginAttempt Model
 
 ```python
 class LoginAttempt:
@@ -122,7 +150,7 @@ class LoginAttempt:
     ip_address: str            # Client IP (127.0.0.1)
 ```
 
-##  Legacy Domain Models
+## Legacy Domain Models
 
 ### User
 

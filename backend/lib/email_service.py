@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 """
-Production-Ready Email Service for OTP Authentication
-Uses Gmail SMTP with proper error handling and fallbacks
+Professional Email Service using Resend API
+For OTP Authentication System - Production Ready
 """
 
-import smtplib
-import ssl
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import requests
 import os
 from typing import Optional
 import asyncio
@@ -15,26 +12,23 @@ from concurrent.futures import ThreadPoolExecutor
 
 class EmailService:
     def __init__(self):
-        # Manually load environment variables from .env file
+        # Load environment variables from .env file
         self._load_env_file()
         
-        # Gmail SMTP configuration
-        self.smtp_server = "smtp.gmail.com"
-        self.smtp_port = 587  # For TLS
-        self.sender_email = os.getenv("GMAIL_EMAIL")
-        self.sender_password = os.getenv("GMAIL_APP_PASSWORD")
+        # Resend API configuration
+        self.api_key = os.getenv("RESEND_API_KEY")
+        self.sender_email = os.getenv("RESEND_SENDER_EMAIL", "noreply@yourdomain.com")
         
         # Connection pool for better performance
         self._executor = ThreadPoolExecutor(max_workers=2)
         
-        # Debug: Print configuration (without password)
-        print(f"Email Service initialized:")
-        print(f"   SMTP Server: {self.smtp_server}:{self.smtp_port}")
-        print(f"   Sender Email: {self.sender_email or 'Not configured'}")
-        print(f"   App Password: {'Set' if self.sender_password else 'Not set'}")
+        # Debug: Print configuration (without API key)
+        print(f"Email Service initialized (Resend API):")
+        print(f"   API Key: {'Set' if self.api_key else 'Not set'}")
+        print(f"   Sender Email: {self.sender_email}")
         
         # Check if properly configured
-        self.is_configured = bool(self.sender_email and self.sender_password)
+        self.is_configured = bool(self.api_key)
         if not self.is_configured:
             print("Email service not configured - using console fallback")
         else:
@@ -59,7 +53,7 @@ class EmailService:
     
     def send_otp_email(self, recipient_email: str, otp_code: str, username: str) -> bool:
         """
-        Send OTP code to user's email address with fallback
+        Send OTP code to user's email address using Resend API
         """
         print(f"Attempting to send OTP to: {recipient_email}")
         print(f"   OTP Code: {otp_code}")
@@ -78,13 +72,10 @@ class EmailService:
             return True
         
         try:
-            # Create message
-            message = MIMEMultipart("alternative")
-            message["Subject"] = f"OTP Code - {otp_code}"
-            message["From"] = self.sender_email
-            message["To"] = recipient_email
+            # Resend API endpoint
+            url = "https://api.resend.com/emails"
             
-            # Enhanced HTML content with better deliverability
+            # Email content
             html_content = f"""
             <!DOCTYPE html>
             <html>
@@ -95,7 +86,7 @@ class EmailService:
                 <style>
                     body {{ 
                         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-                        background: #f5f5f5; 
+                        background: #f8f9fa; 
                         color: #333; 
                         margin: 0; 
                         padding: 20px; 
@@ -105,42 +96,43 @@ class EmailService:
                         max-width: 500px; 
                         margin: 0 auto; 
                         background: #ffffff; 
-                        border: 2px solid #007bff; 
-                        border-radius: 10px; 
+                        border: 2px solid #4a90e2; 
+                        border-radius: 12px; 
                         padding: 30px; 
                         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                     }}
                     .header {{ 
-                        color: #007bff; 
+                        color: #4a90e2; 
                         font-size: 24px; 
                         margin-bottom: 20px; 
                         font-weight: bold;
                     }}
                     .otp-code {{ 
-                        font-size: 32px; 
+                        font-size: 36px; 
                         font-weight: bold; 
                         color: #ffffff; 
-                        background: #007bff; 
+                        background: #4a90e2; 
                         padding: 20px; 
                         border-radius: 8px; 
                         margin: 20px 0; 
                         letter-spacing: 5px;
-                        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+                        box-shadow: 0 2px 4px rgba(74, 144, 226, 0.3);
                     }}
                     .footer {{ 
-                        color: #666; 
+                        color: #6c757d; 
                         font-size: 12px; 
                         margin-top: 30px; 
-                        border-top: 1px solid #eee;
+                        border-top: 1px solid #e9ecef;
                         padding-top: 20px;
                     }}
-                    .warning {{ 
+                    .security-notice {{
                         color: #dc3545; 
                         background: #f8d7da; 
                         border: 1px solid #f5c6cb; 
-                        padding: 10px; 
-                        border-radius: 5px; 
+                        padding: 15px; 
+                        border-radius: 6px; 
                         margin: 15px 0; 
+                        font-size: 14px;
                     }}
                 </style>
             </head>
@@ -148,12 +140,12 @@ class EmailService:
                 <div class="container">
                     <div class="header">OTP Verification Code</div>
                     <p>Hello <strong>{username}</strong>,</p>
-                    <p>Your One-Time Password (OTP) for login is:</p>
+                    <p>Your One-Time Password (OTP) for secure login is:</p>
                     <div class="otp-code">{otp_code}</div>
                     <p><strong>This code will expire in 10 minutes.</strong></p>
-                    <div class="warning">
+                    <div class="security-notice">
                         <strong>Security Notice:</strong> Never share this code with anyone. 
-                        Our team will never ask for your OTP.
+                        Our team will never ask for your OTP via phone or call.
                     </div>
                     <p>If you didn't request this code, please ignore this email.</p>
                     <div class="footer">
@@ -165,57 +157,34 @@ class EmailService:
             </html>
             """
             
-            # Also add plain text version for better deliverability
-            text_content = f"""
-OTP Verification Code
-
-Hello {username},
-
-Your One-Time Password (OTP) for login is: {otp_code}
-
-This code will expire in 10 minutes.
-
-Security Notice: Never share this code with anyone. Our team will never ask for your OTP.
-
-If you didn't request this code, please ignore this email.
-
-© 2026 Authentication System | Secure Login Portal
-This is an automated message. Please do not reply.
-            """
+            # Prepare email data for Resend
+            email_data = {
+                "from": self.sender_email,
+                "to": [recipient_email],
+                "subject": f"OTP Verification Code - {otp_code}",
+                "html": html_content
+            }
             
-            # Attach both HTML and plain text
-            html_part = MIMEText(html_content, "html")
-            text_part = MIMEText(text_content, "plain")
-            message.attach(text_part)
-            message.attach(html_part)
+            # Send via Resend API
+            headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json"
+            }
             
-            # Fast SMTP connection with timeout
-            context = ssl.create_default_context()
+            print("Sending via Resend API...")
+            response = requests.post(url, json=email_data, headers=headers, timeout=15)
             
-            print("Connecting to Gmail SMTP...")
-            with smtplib.SMTP(self.smtp_server, self.smtp_port, timeout=15) as server:
-                server.starttls(context=context)
-                print("Logging into Gmail...")
-                server.login(self.sender_email, self.sender_password)
-                print("Sending email...")
-                server.sendmail(self.sender_email, recipient_email, message.as_string())
+            if response.status_code == 200:
+                print(f"OTP email sent successfully to {recipient_email}")
+                print(f"Response ID: {response.json().get('id', 'N/A')}")
+                return True
+            else:
+                print(f"Resend API error: {response.status_code}")
+                print(f"Response: {response.text}")
+                return False
             
-            print(f"OTP email sent successfully to {recipient_email}")
-            print(f"Check your inbox and spam folder!")
-            return True
-            
-        except smtplib.SMTPAuthenticationError as e:
-            print(f"Gmail authentication failed: {str(e)}")
-            print("Check your Gmail app password in environment variables")
-            return False
-            
-        except smtplib.SMTPRecipientsRefused as e:
-            print(f"Recipient refused: {recipient_email}")
-            print("The email address may be invalid or blocked")
-            return False
-            
-        except smtplib.SMTPException as e:
-            print(f"SMTP error occurred: {str(e)}")
+        except requests.exceptions.RequestException as e:
+            print(f"Network error: {str(e)}")
             return False
             
         except Exception as e:
@@ -223,22 +192,40 @@ This is an automated message. Please do not reply.
             return False
     
     def test_connection(self) -> bool:
-        """Test SMTP connection"""
+        """Test Resend API connection"""
         if not self.is_configured:
             print("Email service not configured - cannot test connection")
             return False
             
         try:
-            context = ssl.create_default_context()
+            url = "https://api.resend.com/emails"
+            headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json"
+            }
             
-            with smtplib.SMTP(self.smtp_server, self.smtp_port, timeout=5) as server:
-                server.starttls(context=context)
-                server.login(self.sender_email, self.sender_password)
-                print("Gmail SMTP connection successful!")
+            # Test with minimal email data
+            test_data = {
+                "from": self.sender_email,
+                "to": ["test@example.com"],
+                "subject": "Connection Test",
+                "html": "<p>Test email from Resend API</p>"
+            }
+            
+            response = requests.get("https://api.resend.com/domains", headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                print("Resend API connection successful!")
+                domains = response.json().get('data', [])
+                print(f"Available domains: {[d.get('name') for d in domains]}")
                 return True
+            else:
+                print(f"Resend API connection failed: {response.status_code}")
+                print(f"Response: {response.text}")
+                return False
                 
         except Exception as e:
-            print(f"Gmail SMTP connection failed: {str(e)}")
+            print(f"Resend API test failed: {str(e)}")
             return False
 
 # Global email service instance
