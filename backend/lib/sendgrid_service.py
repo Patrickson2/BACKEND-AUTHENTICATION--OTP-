@@ -16,17 +16,17 @@ class SendGridService:
         
         # SendGrid configuration
         self.api_key = os.getenv("SENDGRID_API_KEY")
-        self.from_email = os.getenv("SENDGRID_FROM_EMAIL", "patricksonthairu@gmail.com")
+        self.from_email = os.getenv("SENDGRID_FROM_EMAIL", "noreply@auth-system.com")
         self.from_name = os.getenv("SENDGRID_FROM_NAME", "Authentication System")
         
         # Debug: Print configuration
         print(f"SendGrid Service initialized:")
         print(f"   From Email: {self.from_email}")
         print(f"   From Name: {self.from_name}")
-        print(f"   API Key: {\"Set\" if self.api_key else \"Not set\"}")
+        print(f"   API Key: {'Set' if self.api_key else 'Not set'}")
         
         # Check if properly configured
-        self.is_configured = bool(self.api_key)
+        self.is_configured = bool(self.api_key and self.api_key != "your_sendgrid_api_key_here")
         if not self.is_configured:
             print("SendGrid service not configured - using console fallback")
         else:
@@ -43,25 +43,25 @@ class SendGridService:
                     if line and not line.startswith("#") and "=" in line:
                         key, value = line.split("=", 1)
                         # Remove quotes if present
-                        value = value.strip().strip("\"").strip("'")
+                        value = value.strip().strip('"').strip("'")
                         os.environ[key] = value
         else:
             print(f"No .env file found at: {env_file}")
     
     def send_otp_email(self, recipient_email: str, otp_code: str, username: str) -> bool:
         """
-        Send OTP code to user\'s email address using SendGrid
+        Send OTP code to user's email address using SendGrid
         """
         print(f"Attempting to send OTP via SendGrid to: {recipient_email}")
         print(f"   OTP Code: {otp_code}")
         print(f"   Username: {username}")
         
         # Always show OTP in console for development/demo
-        print(f"\n{"="*50}")
+        print(f"\n{'='*50}")
         print(f"  EMAIL SENT TO: {recipient_email}")
         print(f"  YOUR OTP CODE: {otp_code}")
         print(f"  Valid for 10 minutes")
-        print(f"{"="*50}\n")
+        print(f"{'='*50}\n")
         
         # If not configured, just return True (console fallback)
         if not self.is_configured:
@@ -83,7 +83,7 @@ class SendGridService:
                     <title>OTP Verification Code</title>
                     <style>
                         body {{ 
-                            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
                             background: #f8f9fa; 
                             color: #333; 
                             margin: 0; 
@@ -144,7 +144,7 @@ class SendGridService:
                             <strong>Security Notice:</strong> Never share this code with anyone. 
                             Our team will never ask for your OTP.
                         </div>
-                        <p>If you didn\'t request this code, please ignore this email.</p>
+                        <p>If you didn't request this code, please ignore this email.</p>
                         <div class="footer">
                             <p>&copy; 2026 Authentication System | Secure Login Portal</p>
                             <p>This is an automated message. Please do not reply.</p>
@@ -164,7 +164,7 @@ This code will expire in 10 minutes.
 
 Security Notice: Never share this code with anyone. Our team will never ask for your OTP.
 
-If you didn\'t request this code, please ignore this email.
+If you didn't request this code, please ignore this email.
 
 &copy; 2026 Authentication System | Secure Login Portal
 This is an automated message. Please do not reply.
@@ -194,7 +194,7 @@ This is an automated message. Please do not reply.
             
         try:
             sg = SendGridAPIClient(self.api_key)
-            # SendGrid doesn\'t have a direct connection test, so we\'ll validate the API key
+            # SendGrid doesn't have a direct connection test, so we'll validate the API key
             if self.api_key and len(self.api_key) > 10:
                 print("SendGrid API key appears valid")
                 return True

@@ -20,20 +20,17 @@ auth_system/
 ├── 📁 backend/           # FastAPI Web API
 │   ├── main.py          # API endpoints & server
 │   ├── lib/             # Core services
-│   │   ├── models.py    # SQLAlchemy models
-│   │   ├── auth.py      # Password hashing
-│   │   ├── email_service.py  # Gmail SMTP (legacy)
-│   │   ├── sendgrid_service.py  # SendGrid API (current)
+│   │   ├── sendgrid_service.py  # SendGrid API
 │   │   ├── phone_service.py  # Twilio SMS
-│   │   └── otp_service.py    # OTP logic
+│   │   ├── auth.py      # Password hashing
+│   │   ├── models.py    # SQLAlchemy models
+│   │   └── database.py  # Database connection
 │   └── requirements.txt # Python dependencies
 ├── 📁 frontend/         # React Web App
 │   └── Login-OTP/       # TypeScript React app
-├── 📁 main.py           # Original CLI interface
-├── 📁 lib/              # CLI services
 ├── 📁 Dockerfile        # Container configuration
-├── 📁 SETUP_GUIDE.md    # Detailed setup instructions
-└── 📁 setup_services.py # Interactive service setup
+├── 📁 run_local.sh      # Local development script
+└── 📁 README.md         # Project documentation
 ```
 
 ## Quick Start Commands
