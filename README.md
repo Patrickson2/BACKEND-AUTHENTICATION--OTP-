@@ -87,11 +87,18 @@ npm install
 
 # Start Services
 
+# Option 1: Use the automated script (Recommended)
+
+cd ../../
+./run_local_development.sh
+
+# Option 2: Manual startup
+
 # Terminal 1: Backend
 
-cd ../../backend
+cd backend
 source venv/bin/activate
-python main.py
+python -m uvicorn main:app --host 0.0.0.0 --port 8001 --reload
 
 # Terminal 2: Frontend
 
@@ -100,19 +107,12 @@ npm run dev
 
 # Access: http://localhost:5173
 
-````
-
-### Option 2: CLI Interface (Original)
+### Option 3: CLI Interface
 
 ```bash
-# Setup CLI
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# Run CLI
-python main.py
-````
+# Run CLI Application
+python3 cli_app.py
+```
 
 ## Data Models (CLI Style)
 

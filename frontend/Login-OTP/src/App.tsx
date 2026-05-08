@@ -3,7 +3,7 @@ import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 // API base URL
-const API_URL = "https://backend-authentication-otp.onrender.com/api";
+const API_URL = ["https://backend-authentication-otp.onrender.com/api", "http://localhost:8001/api"];
 
 interface UserInfo {
   user_id: number;
