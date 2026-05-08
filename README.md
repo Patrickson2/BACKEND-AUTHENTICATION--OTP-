@@ -43,8 +43,8 @@ cd backend
 python3 -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-python migrate_database.py  # Fix database schema
-python setup_services.py   # Configure SendGrid/Twilio
+./setup.sh  # Initialize database and setup
+```
 
 ### Option 2: SendGrid API Setup (Required for Email OTP)
 
@@ -74,11 +74,11 @@ python setup_services.py   # Configure SendGrid/Twilio
 
 **Benefits of SendGrid over Gmail SMTP**:
 
-- ✅ **Higher deliverability** - Professional email service
-- ✅ **Better analytics** - Track email delivery
-- ✅ **No rate limits** - SendGrid handles scaling
-- ✅ **Security** - API key instead of password
-- ✅ **Production ready** - Built for applications
+- **Higher deliverability** - Professional email service
+- **Better analytics** - Track email delivery
+- **No rate limits** - SendGrid handles scaling
+- **Security** - API key instead of password
+- **Production ready** - Built for applications
 
 # Frontend Setup
 
