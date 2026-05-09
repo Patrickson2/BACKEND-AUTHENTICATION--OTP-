@@ -105,7 +105,28 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8001 --reload
 cd ../frontend/Login-OTP
 npm run dev
 
-# Access: http://localhost:5173
+# Local Development: http://localhost:5173
+
+# Deployed Frontend: https://backend-authentication-otp-6kyb.vercel.app/
+
+# Deployed Backend: https://backend-authentication-otp.onrender.com/docs
+
+## Deployed Application
+
+### Live URLs
+
+- **Frontend**: https://backend-authentication-otp-6kyb.vercel.app/
+- **Backend API**: https://backend-authentication-otp.onrender.com/api
+- **API Documentation**: https://backend-authentication-otp.onrender.com/docs
+
+### Features
+
+- SendGrid email integration with themed templates
+- OTP authentication system
+- User registration and login
+- Phone number validation for 48+ countries
+- Modern black/red theme design
+- Real-time OTP delivery
 
 ### Option 3: CLI Interface
 
