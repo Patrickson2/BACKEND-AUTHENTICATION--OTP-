@@ -227,6 +227,12 @@ function App() {
     );
 
     try {
+      console.log("Sending OTP request to:", `${API_URL}/api/generate-otp`);
+      console.log("Request body:", {
+        user_id: userInfo.user_id,
+        delivery_method: deliveryMethod,
+      });
+      
       const response = await fetch(`${API_URL}/api/generate-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -236,10 +242,14 @@ function App() {
         }),
       });
 
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
+
       const data = await response.json();
+      console.log("Response data:", data);
 
       if (!response.ok) {
-        setError(data.detail || "Failed to generate OTP");
+        setError(data.detail || `Failed to generate OTP (Status: ${response.status})`);
         setIsLoading(false);
         return;
       }
