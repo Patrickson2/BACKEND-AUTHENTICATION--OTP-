@@ -83,9 +83,9 @@ class SendGridService:
                     <title>OTP Verification Code</title>
                     <style>
                         body {{ 
-                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-                            background: #f8f9fa; 
-                            color: #333; 
+                            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+                            background: #000000; 
+                            color: #ffffff; 
                             margin: 0; 
                             padding: 20px; 
                             text-align: center; 
@@ -93,58 +93,92 @@ class SendGridService:
                         .container {{ 
                             max-width: 500px; 
                             margin: 0 auto; 
-                            background: #ffffff; 
-                            border: 2px solid #007bff; 
-                            border-radius: 10px; 
+                            background: #111111; 
+                            border: 2px solid #ff0000; 
+                            border-radius: 12px; 
                             padding: 30px; 
-                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.2);
                         }}
                         .header {{ 
-                            color: #007bff; 
+                            color: #ffffff; 
                             font-size: 24px; 
                             margin-bottom: 20px; 
-                            font-weight: bold;
+                            font-weight: 600;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            border-bottom: 2px solid #ff0000;
+                            padding-bottom: 15px;
                         }}
                         .otp-code {{ 
                             font-size: 32px; 
                             font-weight: bold; 
                             color: #ffffff; 
-                            background: #007bff; 
+                            background: #ff0000; 
                             padding: 20px; 
                             border-radius: 8px; 
                             margin: 20px 0; 
                             letter-spacing: 5px;
                             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+                            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
                         }}
                         .footer {{ 
-                            color: #6c757d; 
+                            color: #ffffff; 
                             font-size: 12px; 
                             margin-top: 30px; 
-                            border-top: 1px solid #eee;
+                            border-top: 1px solid #333333;
                             padding-top: 20px;
                         }}
                         .warning {{ 
-                            color: #dc3545; 
-                            background: #f8d7da; 
-                            border: 1px solid #f5c6cb; 
-                            padding: 10px; 
-                            border-radius: 5px; 
+                            color: #ffffff; 
+                            background: #222222; 
+                            border: 1px solid #ff0000; 
+                            padding: 15px; 
+                            border-radius: 8px; 
                             margin: 15px 0; 
+                        }}
+                        .warning strong {{
+                            color: #ff0000;
+                        }}
+                        .user-info {{
+                            background: #222222;
+                            border: 1px solid #333333;
+                            border-radius: 8px;
+                            padding: 15px;
+                            margin: 15px 0;
+                        }}
+                        .user-info strong {{
+                            color: #ff0000;
+                        }}
+                        .expiry-info {{
+                            color: #ff0000;
+                            font-weight: 600;
+                            font-size: 14px;
+                            margin: 10px 0;
                         }}
                     </style>
                 </head>
                 <body>
                     <div class="container">
                         <div class="header">OTP Verification Code</div>
-                        <p>Hello <strong>{username}</strong>,</p>
-                        <p>Your One-Time Password (OTP) for login is:</p>
+                        
+                        <div class="user-info">
+                            Hello <strong>{username}</strong>,<br>
+                            Your One-Time Password (OTP) for login is ready:
+                        </div>
+                        
                         <div class="otp-code">{otp_code}</div>
-                        <p><strong>This code will expire in 10 minutes.</strong></p>
+                        
+                        <div class="expiry-info">
+                            This code will expire in 10 minutes
+                        </div>
+                        
                         <div class="warning">
                             <strong>Security Notice:</strong> Never share this code with anyone. 
                             Our team will never ask for your OTP.
                         </div>
+                        
                         <p>If you didn't request this code, please ignore this email.</p>
+                        
                         <div class="footer">
                             <p>&copy; 2026 Authentication System | Secure Login Portal</p>
                             <p>This is an automated message. Please do not reply.</p>
@@ -166,7 +200,7 @@ Security Notice: Never share this code with anyone. Our team will never ask for 
 
 If you didn't request this code, please ignore this email.
 
-&copy; 2026 Authentication System | Secure Login Portal
+© 2026 Authentication System | Secure Login Portal
 This is an automated message. Please do not reply.
                 """
             )
