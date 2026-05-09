@@ -3,7 +3,7 @@ import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 // API base URL
-const API_URL = ["https://backend-authentication-otp.onrender.com/api", "http://localhost:8001/api"];
+const API_URL = "http://localhost:8001/api";
 
 interface UserInfo {
   user_id: number;
@@ -53,11 +53,11 @@ function App() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
-  
+
   // Password visibility states
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+
   // Phone validation state
   const [phoneError, setPhoneError] = useState("");
   const [countrySearch, setCountrySearch] = useState("");
@@ -74,47 +74,62 @@ function App() {
       setPhoneError("Phone number too short");
       return false;
     }
-    
+
     if (phoneNumber.length > 15) {
       setPhoneError("Phone number too long");
       return false;
     }
-    
+
     setPhoneError("");
     return true;
   };
 
   // Filter countries based on search
-  const filteredCountries = countryCodes.filter((country: any) => 
-    country.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
-    country.code.includes(countrySearch)
+  const filteredCountries = countryCodes.filter(
+    (country: any) =>
+      country.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
+      country.code.includes(countrySearch),
   );
 
   // Handle country selection with auto-populate
   const handleCountryChange = (countryCode: string) => {
     setSelectedCountryCode(countryCode);
-    
+
     // Auto-populate phone field with country code
     if (phone) {
       // Extract the actual phone number (remove any existing country codes)
       let phoneNumber = phone;
-      
+
       // Remove common country codes from the beginning
-      const commonCodes = ['+', '1', '44', '254', '255', '256', '91', '86', '81', '49', '33', '27', '234'];
+      const commonCodes = [
+        "+",
+        "1",
+        "44",
+        "254",
+        "255",
+        "256",
+        "91",
+        "86",
+        "81",
+        "49",
+        "33",
+        "27",
+        "234",
+      ];
       for (const code of commonCodes) {
         if (phoneNumber.startsWith(code)) {
           phoneNumber = phoneNumber.substring(code.length);
           break;
         }
       }
-      
+
       // Set the new phone with selected country code
       setPhone(countryCode + phoneNumber);
     } else {
       // If phone is empty, just set the country code
       setPhone(countryCode);
     }
-    
+
     // Clear any phone errors when changing country
     setPhoneError("");
   };
@@ -205,9 +220,11 @@ function App() {
     if (!userInfo) return;
 
     setIsLoading(true);
-    
+
     // Show immediate feedback
-    setError(`Sending OTP via ${deliveryMethod === "email" ? "Email" : "SMS"}...`);
+    setError(
+      `Sending OTP via ${deliveryMethod === "email" ? "Email" : "SMS"}...`,
+    );
 
     try {
       const response = await fetch(`${API_URL}/generate-otp`, {
@@ -229,14 +246,13 @@ function App() {
 
       // Clear the sending message
       setError("");
-      
+
       // Auto-navigate to OTP verification after 1 second
       setTimeout(() => {
         setOtpCode(data.otp_code);
         setPage("otp-verify");
         setIsLoading(false);
       }, 1000);
-      
     } catch (err) {
       setError("Failed to connect to server");
       setIsLoading(false);
@@ -376,13 +392,13 @@ function App() {
                       onChange={(e) => {
                         const newPhone = e.target.value;
                         setPhone(newPhone);
-                        
+
                         // Extract country code from the beginning for validation
                         const countryCode = selectedCountryCode;
-                        const phoneNumber = newPhone.startsWith(countryCode) 
+                        const phoneNumber = newPhone.startsWith(countryCode)
                           ? newPhone.substring(countryCode.length)
                           : newPhone;
-                        
+
                         validatePhoneNumber(countryCode, phoneNumber);
                       }}
                       placeholder={`${selectedCountryCode}123456789`}
@@ -390,9 +406,14 @@ function App() {
                       className={phoneError ? "phone-input-error" : ""}
                     />
                   </div>
-                  {phoneError && <div className="phone-error">{phoneError}</div>}
+                  {phoneError && (
+                    <div className="phone-error">{phoneError}</div>
+                  )}
                   <div className="phone-hint">
-                    <small>Format: {selectedCountryCode} followed by your phone number</small>
+                    <small>
+                      Format: {selectedCountryCode} followed by your phone
+                      number
+                    </small>
                   </div>
                 </div>
 
@@ -412,7 +433,9 @@ function App() {
                       className="password-toggle"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                      <i
+                        className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                      ></i>
                     </button>
                   </div>
                 </div>
@@ -430,9 +453,13 @@ function App() {
                     <button
                       type="button"
                       className="password-toggle"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                     >
-                      <i className={`fas ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                      <i
+                        className={`fas ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}
+                      ></i>
                     </button>
                   </div>
                 </div>
@@ -473,7 +500,9 @@ function App() {
                       className="password-toggle"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                      <i
+                        className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                      ></i>
                     </button>
                   </div>
                 </div>
@@ -498,7 +527,9 @@ function App() {
                 className={deliveryMethod === "email" ? "selected" : ""}
                 onClick={() => setDeliveryMethod("email")}
               >
-                <span className="method-icon"><i className="fas fa-envelope"></i></span>
+                <span className="method-icon">
+                  <i className="fas fa-envelope"></i>
+                </span>
                 <span className="method-label">Email</span>
                 <span className="method-detail">{userInfo.email}</span>
               </button>
@@ -507,7 +538,9 @@ function App() {
                 className={deliveryMethod === "sms" ? "selected" : ""}
                 onClick={() => setDeliveryMethod("sms")}
               >
-                <span className="method-icon"><i className="fas fa-sms"></i></span>
+                <span className="method-icon">
+                  <i className="fas fa-sms"></i>
+                </span>
                 <span className="method-label">SMS</span>
                 <span className="method-detail">{userInfo.phone_number}</span>
               </button>
@@ -515,15 +548,14 @@ function App() {
 
             {error && <div className="error-message">{error}</div>}
 
-            <button 
-              onClick={handleGenerateOTP} 
+            <button
+              onClick={handleGenerateOTP}
               className="submit-btn"
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  <i className="fas fa-spinner fa-spin"></i>
-                  {" "}Sending...
+                  <i className="fas fa-spinner fa-spin"></i> Sending...
                 </>
               ) : (
                 <>Send OTP via {deliveryMethod === "email" ? "Email" : "SMS"}</>
@@ -563,8 +595,7 @@ function App() {
               <button type="submit" className="submit-btn" disabled={isLoading}>
                 {isLoading ? (
                   <>
-                    <i className="fas fa-spinner fa-spin"></i>
-                    {" "}Verifying...
+                    <i className="fas fa-spinner fa-spin"></i> Verifying...
                   </>
                 ) : (
                   "Verify & Login"
@@ -580,7 +611,9 @@ function App() {
 
         {page === "success" && userInfo && (
           <div className="success-container">
-            <div className="success-icon"><i className="fas fa-check"></i></div>
+            <div className="success-icon">
+              <i className="fas fa-check"></i>
+            </div>
             <h2>Login Successful!</h2>
             <p className="success-message">
               Thanks for logging in, {userInfo.username}!
