@@ -14,6 +14,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'backend'))
 
 class CLIAuth:
     def __init__(self):
+        # Change to backend directory to use same database
+        os.chdir(os.path.join(os.path.dirname(__file__), 'backend'))
+        
         # Import backend modules
         from lib.database import SessionLocal, engine
         from lib.models import Base, User, OTP, LoginAttempt
