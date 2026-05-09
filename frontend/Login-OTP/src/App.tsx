@@ -30,7 +30,7 @@ function App() {
 
   const fetchCountries = async () => {
     try {
-      const response = await fetch(`${API_URL}/countries`);
+      const response = await fetch(`${API_URL}/api/countries`);
       const data = await response.json();
       setCountryCodes(data);
       if (data.length > 0) {
@@ -155,7 +155,7 @@ function App() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/register`, {
+      const response = await fetch(`${API_URL}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -192,7 +192,7 @@ function App() {
     setError("");
 
     try {
-      const response = await fetch(`${API_URL}/login`, {
+      const response = await fetch(`${API_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -227,7 +227,7 @@ function App() {
     );
 
     try {
-      const response = await fetch(`${API_URL}/generate-otp`, {
+      const response = await fetch(`${API_URL}/api/generate-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -269,7 +269,7 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/verify-otp`, {
+      const response = await fetch(`${API_URL}/api/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
