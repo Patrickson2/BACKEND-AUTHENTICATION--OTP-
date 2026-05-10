@@ -128,14 +128,59 @@ npm run dev
 - Modern black/red theme design
 - Real-time OTP delivery
 
+### Deployment Configuration
+
+For proper deployment, ensure the following environment variables are configured:
+
+**Render Backend Environment Variables**:
+
+```
+SENDGRID_API_KEY=your_sendgrid_api_key_here
+SENDGRID_FROM_EMAIL=patricksonthairu@gmail.com
+SENDGRID_FROM_NAME=OTP-Authentication System
+DATABASE_URL=sqlite:///auth_system.db
+```
+
+**Frontend Configuration**:
+
+- API URL automatically points to deployed backend
+- CORS configured for cross-origin requests
+- Responsive design for mobile and desktop
+
 ### Option 3: CLI Interface
 
 ```bash
 # Run CLI Application
-python3 cli_app.py
+python3 cli_auth.py
 ```
 
-## Data Models (CLI Style)
+## CLI Application Features
+
+The CLI application provides a complete command-line interface for authentication:
+
+- **User Registration**: Create new accounts with validation
+- **Login Authentication**: Secure password verification
+- **OTP Generation**: Generate and send OTP codes via SendGrid
+- **OTP Verification**: Verify 6-digit codes
+- **Database Integration**: Shared database with web application
+- **Real Email Delivery**: Uses SendGrid API for OTP emails
+- **User Management**: View all registered users
+
+### CLI Commands
+
+```bash
+# Start CLI Application
+python3 cli_auth.py
+
+# Available Options:
+1. Register New User     # Create new account
+2. Login with OTP        # Authenticate and generate OTP
+3. Test SendGrid Email   # Test email delivery
+4. Show All Users        # View registered users
+5. Exit                 # Quit application
+```
+
+## Data Models
 
 ### User Model
 
@@ -178,6 +223,47 @@ class LoginAttempt:
     timestamp: datetime        # Attempt time
     successful: bool           # Success/failure
     ip_address: str            # Client IP (127.0.0.1)
+```
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+**Issue: OTP not sending on deployed application**
+
+- **Cause**: Environment variables not configured on Render
+- **Solution**: Add SendGrid API key to Render environment variables
+- **Check**: Visit `/api/test-services` to verify configuration
+
+**Issue: CORS errors in browser**
+
+- **Cause**: Frontend trying to connect to different origin
+- **Solution**: Ensure CORS middleware allows all origins
+- **Check**: Backend should have `allow_origins=["*"]`
+
+**Issue: Database not persisting data**
+
+- **Cause**: Database path issues on deployment
+- **Solution**: Use absolute database path `sqlite:///auth_system.db`
+- **Check**: Verify database file location and permissions
+
+**Issue: CLI not finding users**
+
+- **Cause**: CLI using different database than web app
+- **Solution**: Ensure CLI uses same database path as backend
+- **Check**: CLI should change to backend directory before importing
+
+### Debug Commands
+
+```bash
+# Test SendGrid configuration
+curl https://your-backend.onrender.com/api/test-services
+
+# Check database users
+curl https://your-backend.onrender.com/api/debug/users
+
+# Test email sending
+curl "https://your-backend.onrender.com/api/debug/test-email?email=your@email.com"
 ```
 
 ## Legacy Domain Models
