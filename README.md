@@ -136,8 +136,8 @@ For proper deployment, ensure the following environment variables are configured
 
 ```
 SENDGRID_API_KEY=your_sendgrid_api_key_here
-SENDGRID_FROM_EMAIL=patricksonthairu@gmail.com
-SENDGRID_FROM_NAME=OTP-Authentication System
+SENDGRID_FROM_EMAIL=your-email@gmail.com
+SENDGRID_FROM_NAME=Your App Name
 DATABASE_URL=sqlite:///auth_system.db
 ```
 
