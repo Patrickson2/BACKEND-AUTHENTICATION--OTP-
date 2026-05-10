@@ -49,7 +49,7 @@ from lib.sendgrid_service import sendgrid_service
 from lib.phone_service import phone_service
 
 # Database configuration
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./auth_system.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///auth_system.db")
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 
