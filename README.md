@@ -87,31 +87,31 @@ npm install
 
 # Start Services
 
-# Option 1: Use the automated script (Recommended)
+## Option 1: Use the automated script (Recommended)
 
 cd ../../
 ./run_local_development.sh
 
-# Option 2: Manual startup
+## Option 2: Manual startup
 
-# Terminal 1: Backend
+### Terminal 1: Backend
 
 cd backend
 source venv/bin/activate
 python -m uvicorn main:app --host 0.0.0.0 --port 8001 --reload
 
-# Terminal 2: Frontend
+### Terminal 2: Frontend
 
 cd ../frontend/Login-OTP
 npm run dev
 
-# Local Development: http://localhost:5173
+### Local Development: http://localhost:5173
 
-# Deployed Frontend: https://backend-authentication-otp-6kyb.vercel.app/
+### Deployed Frontend: https://backend-authentication-otp-6kyb.vercel.app/
 
-# Deployed Backend: https://backend-authentication-otp.onrender.com/docs
+### Deployed Backend: https://backend-authentication-otp.onrender.com/docs
 
-## Deployed Application
+### Deployed Application
 
 ### Live URLs
 
