@@ -76,7 +76,7 @@ pip install -r requirements.txt
 
 - **Higher deliverability** - Professional email service
 - **Better analytics** - Track email delivery
-- **No rate limits** - SendGrid handles scaling
+- **Endpoint rate limiting** - Authentication and OTP requests are throttled per client IP
 - **Security** - API key instead of password
 - **Production ready** - Built for applications
 
@@ -135,9 +135,9 @@ For proper deployment, ensure the following environment variables are configured
 **Render Backend Environment Variables**:
 
 ```
-SENDGRID_API_KEY=your_sendgrid_api_key_here
-SENDGRID_FROM_EMAIL=your-email@gmail.com
-SENDGRID_FROM_NAME=Your App Name
+SENDGRID_API_KEY
+SENDGRID_FROM_EMAIL
+SENDGRID_FROM_NAME
 DATABASE_URL=sqlite:///auth_system.db
 ```
 
@@ -617,7 +617,7 @@ Potential improvements for learning:
 - [ ] Add email verification on registration
 - [ ] Implement password reset functionality
 - [ ] Add session timeout
-- [ ] Rate limiting for failed login attempts
+- [ ] Move rate-limit state to Redis for multi-instance deployments
 - [ ] Export login history to CSV
 - [ ] Add user roles and permissions
 - [ ] Implement remember me functionality
