@@ -9,10 +9,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
+from collections import defaultdict, deque
 from datetime import datetime
 import random
 import os
+from threading import Lock
+from time import monotonic
 from dotenv import load_dotenv
+from starlette.responses import JSONResponse
 
 # Load environment variables
 load_dotenv()
@@ -48,6 +52,56 @@ from lib.auth import hash_password, check_password
 from lib.sendgrid_service import sendgrid_service
 from lib.phone_service import phone_service
 
+
+class RateLimiter:
+    def __init__(self):
+        self._requests = defaultdict(deque)
+        self._lock = Lock()
+
+    async def __call__(self, request, call_next):
+        if request.method != "POST":
+            return await call_next(request)
+
+        limit_config = {
+            "/api/register": (5, 60),
+            "/api/login": (10, 60),
+            "/api/generate-otp": (3, 600),
+            "/api/verify-otp": (10, 600),
+        }.get(request.url.path)
+
+        if limit_config is None:
+            return await call_next(request)
+
+        limit, window_seconds = limit_config
+        client_ip = request.client.host if request.client else "unknown"
+        key = (client_ip, request.url.path)
+        now = monotonic()
+
+        with self._lock:
+            request_times = self._requests[key]
+            while request_times and now - request_times[0] >= window_seconds:
+                request_times.popleft()
+
+            if len(request_times) >= limit:
+                retry_after = max(1, int(window_seconds - (now - request_times[0])))
+                return JSONResponse(
+                    status_code=429,
+                    content={
+                        "detail": "Too many requests. Please try again later."
+                    },
+                    headers={"Retry-After": str(retry_after)},
+                )
+
+            request_times.append(now)
+
+        response = await call_next(request)
+        response.headers["X-RateLimit-Limit"] = str(limit)
+        response.headers["X-RateLimit-Remaining"] = str(max(0, limit - len(request_times)))
+        return response
+
+
+rate_limiter = RateLimiter()
+
 # Database configuration
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///auth_system.db")
 engine = create_engine(DATABASE_URL)
@@ -57,6 +111,9 @@ SessionLocal = sessionmaker(bind=engine)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="OTP Authentication API")
+
+# Protect authentication and OTP endpoints from repeated requests per client IP.
+app.middleware("http")(rate_limiter)
 
 # CORS middleware
 app.add_middleware(
