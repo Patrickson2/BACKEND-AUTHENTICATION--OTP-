@@ -2,6 +2,8 @@
 echo " Starting OTP Authentication System - Local Development"
 echo ""
 
+
+
 # Kill any existing processes
 echo " Stopping existing processes..."
 pkill -f "python.*main.py" 2>/dev/null || true
